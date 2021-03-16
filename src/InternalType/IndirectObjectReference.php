@@ -74,7 +74,7 @@ class IndirectObjectReference extends AbstractTypeObject
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
     public function __construct($objNum,
-                                $genNum = 0,
+                                $genNum,
                                 IndirectObjectReference\Context $context,
                                 Pdf\ObjectFactory $factory)
     {

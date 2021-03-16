@@ -43,7 +43,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
      */
     private $_originaltimezone;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_originaltimezone = date_default_timezone_get();
         date_default_timezone_set('GMT');
@@ -52,7 +52,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
     /**
      * Teardown environment
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         date_default_timezone_set($this->_originaltimezone);
     }

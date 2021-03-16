@@ -19,7 +19,7 @@ use LaminasPdf\Exception;
  * @package    LaminasPdf
  * @subpackage LaminasPdf\BinaryParser
  */
-class String extends AbstractDataSource
+class String_ extends AbstractDataSource
 {
     /**** Instance Variables ****/
 
