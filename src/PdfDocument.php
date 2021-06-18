@@ -1143,7 +1143,11 @@ class PdfDocument
                         if (extension_loaded('mbstring') === true) {
                             $detected = mb_detect_encoding($value);
                             if ($detected !== 'ASCII') {
-                                $value = chr(254) . chr(255) . mb_convert_encoding($value, 'UTF-16', $detected);
+                                if (false === $detected) { // do not provide the failed detected encoding
+                                    $value = chr(254) . chr(255) . mb_convert_encoding($value, 'UTF-16');
+                                } else {
+                                    $value = chr(254) . chr(255) . mb_convert_encoding($value, 'UTF-16', $detected);
+                                }
                             }
                         }
                         $docInfo->$key = new InternalType\StringObject((string)$value);
