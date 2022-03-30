@@ -9,7 +9,7 @@
   ],
   "require": {
     "php": ">=7.3",
-    "laminas/laminas-memory": ">=2.0.0",
+    "laminas/laminas-memory": "^2.9",
     "laminas/laminas-stdlib": ">=2.0.0"
   },
   "require-dev": {
@@ -29,5 +29,10 @@
   },
   "replace": {
     "zendframework/zendpdf": "^2.0.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   }
 }
