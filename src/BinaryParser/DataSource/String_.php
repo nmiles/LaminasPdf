@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -19,16 +20,14 @@ use LaminasPdf\Exception;
  * @package    LaminasPdf
  * @subpackage LaminasPdf\BinaryParser
  */
-class String extends AbstractDataSource
+class String_ extends AbstractDataSource
 {
     /**** Instance Variables ****/
 
-
     /**
      * The string to parse.
-     * @var string
      */
-    protected $_string = '';
+    protected string $_string = '';
 
 
     /**** Public Interface ****/
@@ -41,9 +40,9 @@ class String extends AbstractDataSource
      *
      * Verifies that the string is not empty.
      *
-     * @param string $string String to parse.
+     * @param null|string $string String to parse.
      */
-    public function __construct($string)
+    public function __construct(?string $string)
     {
         if (empty($string)) {
             throw new Exception\InvalidArgumentException('String is empty');
@@ -103,7 +102,7 @@ class String extends AbstractDataSource
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return "String ($this->_size bytes)";
     }
