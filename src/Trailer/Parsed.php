@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -44,10 +45,11 @@ class Parsed extends AbstractTrailer
      * @param \LaminasPdf\InternalType\IndirectObjectReference\Context $context
      * @param \LaminasPdf\Trailer\AbstractTrailer $prev
      */
-    public function __construct(InternalType\DictionaryObject $dict,
-                                InternalType\IndirectObjectReference\Context $context,
-                                AbstractTrailer $prev = null)
-    {
+    public function __construct(
+        InternalType\DictionaryObject $dict,
+        InternalType\IndirectObjectReference\Context $context,
+        AbstractTrailer $prev = null
+    ) {
         parent::__construct($dict);
 
         $this->_context = $context;

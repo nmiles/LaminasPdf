@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -43,7 +44,7 @@ class TrimmedTable extends AbstractCmap
      * Glyph index array. Stores the actual glyph numbers.
      * @var array
      */
-    protected $_glyphIndexArray = array();
+    protected $_glyphIndexArray = [];
 
 
     /**** Public Interface ****/
@@ -64,9 +65,8 @@ class TrimmedTable extends AbstractCmap
      */
     public function glyphNumbersForCharacters($characterCodes)
     {
-        $glyphNumbers = array();
+        $glyphNumbers = [];
         foreach ($characterCodes as $key => $characterCode) {
-
             if (($characterCode < $this->_startCode) || ($characterCode > $this->_endCode)) {
                 $glyphNumbers[$key] = AbstractCmap::MISSING_CHARACTER_GLYPH;
                 continue;
@@ -74,7 +74,6 @@ class TrimmedTable extends AbstractCmap
 
             $glyphIndex = $characterCode - $this->_startCode;
             $glyphNumbers[$key] = $this->_glyphIndexArray[$glyphIndex];
-
         }
         return $glyphNumbers;
     }
@@ -108,7 +107,7 @@ class TrimmedTable extends AbstractCmap
      */
     public function getCoveredCharacters()
     {
-        $characterCodes = array();
+        $characterCodes = [];
         for ($code = $this->_startCode; $code <= $this->_endCode; $code++) {
             $characterCodes[] = $code;
         }
@@ -129,7 +128,7 @@ class TrimmedTable extends AbstractCmap
      */
     public function getCoveredCharactersGlyphs()
     {
-        $glyphNumbers = array();
+        $glyphNumbers = [];
         for ($code = $this->_startCode; $code <= $this->_endCode; $code++) {
             $glyphNumbers[$code] = $this->_glyphIndexArray[$code - $this->_startCode];
         }

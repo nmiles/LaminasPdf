@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -61,9 +62,11 @@ abstract class AbstractCompression implements Pdf\InternalType\StreamFilter\Stre
         if (isset($params['Predictor'])) {
             $predictor = $params['Predictor'];
 
-            if ($predictor != 1 && $predictor != 2 &&
+            if (
+                $predictor != 1 && $predictor != 2 &&
                 $predictor != 10 && $predictor != 11 && $predictor != 12 &&
-                $predictor != 13 && $predictor != 14 && $predictor != 15) {
+                $predictor != 13 && $predictor != 14 && $predictor != 15
+            ) {
                 throw new Exception\CorruptedPdfException('Invalid value of \'Predictor\' decode param - ' . $predictor . '.');
             }
             return $predictor;
@@ -105,9 +108,11 @@ abstract class AbstractCompression implements Pdf\InternalType\StreamFilter\Stre
         if (isset($params['BitsPerComponent'])) {
             $bitsPerComponent = $params['BitsPerComponent'];
 
-            if ($bitsPerComponent != 1 && $bitsPerComponent != 2 &&
+            if (
+                $bitsPerComponent != 1 && $bitsPerComponent != 2 &&
                 $bitsPerComponent != 4 && $bitsPerComponent != 8 &&
-                $bitsPerComponent != 16) {
+                $bitsPerComponent != 16
+            ) {
                 throw new Exception\CorruptedPdfException('Invalid value of \'BitsPerComponent\' decode param - ' . $bitsPerComponent . '.');
             }
             return $bitsPerComponent;
@@ -164,7 +169,8 @@ abstract class AbstractCompression implements Pdf\InternalType\StreamFilter\Stre
         }
 
         /** PNG prediction */
-        if ($predictor == 10 || /** None of prediction */
+        if (
+            $predictor == 10 || /** None of prediction */
             $predictor == 11 || /** Sub prediction     */
             $predictor == 12 || /** Up prediction      */
             $predictor == 13 || /** Average prediction */
@@ -241,7 +247,7 @@ abstract class AbstractCompression implements Pdf\InternalType\StreamFilter\Stre
 
                 case 4: // Paeth prediction
                     $lastRow = array_fill(0, $bytesPerRow, 0);
-                    $currentRow = array();
+                    $currentRow = [];
                     for ($count = 0; $count < $rows; $count++) {
                         $output .= chr($predictor);
 
@@ -249,10 +255,12 @@ abstract class AbstractCompression implements Pdf\InternalType\StreamFilter\Stre
                         for ($count2 = 0; $count2 < $bytesPerRow; $count2++) {
                             $newByte = ord($data[$offset++]);
                             // Note. chr() automatically cuts input to 8 bit
-                            $output .= chr($newByte - self::_paeth($lastSample[$count2 % $bytesPerSample],
-                                    $lastRow[$count2],
-                                    ($count2 - $bytesPerSample < 0) ?
-                                        0 : $lastRow[$count2 - $bytesPerSample]));
+                            $output .= chr($newByte - self::_paeth(
+                                $lastSample[$count2 % $bytesPerSample],
+                                $lastRow[$count2],
+                                ($count2 - $bytesPerSample < 0) ?
+                                0 : $lastRow[$count2 - $bytesPerSample]
+                            ));
                             $lastSample[$count2 % $bytesPerSample] = $currentRow[$count2] = $newByte;
                         }
                         $lastRow = $currentRow;
@@ -294,13 +302,14 @@ abstract class AbstractCompression implements Pdf\InternalType\StreamFilter\Stre
          * Prediction code is duplicated on each row.
          * Thus all cases can be brought to one
          */
-        if ($predictor == 10 || /** None of prediction */
+        if (
+            $predictor == 10 || /** None of prediction */
             $predictor == 11 || /** Sub prediction     */
             $predictor == 12 || /** Up prediction      */
             $predictor == 13 || /** Average prediction */
             $predictor == 14 || /** Paeth prediction   */
-            $predictor == 15/** Optimal prediction */) {
-
+            $predictor == 15/** Optimal prediction */
+        ) {
             $bitsPerSample = $bitsPerComponent * $colors;
             $bytesPerSample = ceil($bitsPerSample / 8);
             $bytesPerRow = ceil($bitsPerSample * $columns / 8);
@@ -346,13 +355,15 @@ abstract class AbstractCompression implements Pdf\InternalType\StreamFilter\Stre
                         break;
 
                     case 4: // Paeth prediction
-                        $currentRow = array();
+                        $currentRow = [];
                         for ($count2 = 0; $count2 < $bytesPerRow && $offset < strlen($data); $count2++) {
                             $decodedByte = (ord($data[$offset++]) +
-                                    self::_paeth($lastSample[$count2 % $bytesPerSample],
+                                    self::_paeth(
+                                        $lastSample[$count2 % $bytesPerSample],
                                         $lastRow[$count2],
                                         ($count2 - $bytesPerSample < 0) ?
-                                            0 : $lastRow[$count2 - $bytesPerSample])
+                                        0 : $lastRow[$count2 - $bytesPerSample]
+                                    )
                                 ) & 0xFF;
                             $lastSample[$count2 % $bytesPerSample] = $currentRow[$count2] = $decodedByte;
                             $output .= chr($decodedByte);

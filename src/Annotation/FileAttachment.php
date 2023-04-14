@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -33,9 +34,11 @@ class FileAttachment extends AbstractAnnotation
             throw new Exception\CorruptedPdfException('Annotation dictionary resource has to be a dictionary.');
         }
 
-        if ($annotationDictionary->Subtype === null ||
+        if (
+            $annotationDictionary->Subtype === null ||
             $annotationDictionary->Subtype->getType() != InternalType\AbstractTypeObject::TYPE_NAME ||
-            $annotationDictionary->Subtype->value != 'FileAttachment') {
+            $annotationDictionary->Subtype->value != 'FileAttachment'
+        ) {
             throw new Exception\CorruptedPdfException('Subtype => FileAttachment entry is requires');
         }
 

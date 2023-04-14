@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -32,9 +33,11 @@ class Text extends AbstractAnnotation
             throw new Exception\CorruptedPdfException('Annotation dictionary resource has to be a dictionary.');
         }
 
-        if ($annotationDictionary->Subtype === null ||
+        if (
+            $annotationDictionary->Subtype === null ||
             $annotationDictionary->Subtype->getType() != InternalType\AbstractTypeObject::TYPE_NAME ||
-            $annotationDictionary->Subtype->value != 'Text') {
+            $annotationDictionary->Subtype->value != 'Text'
+        ) {
             throw new Exception\CorruptedPdfException('Subtype => Text entry is requires');
         }
 

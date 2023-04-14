@@ -36,7 +36,7 @@ class NumericTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFNumericBadArgument()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be numeric');
         $intObj = new InternalType\NumericObject('some input');
     }

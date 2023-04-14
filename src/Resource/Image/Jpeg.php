@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -21,7 +22,6 @@ use LaminasPdf\InternalType;
  */
 class Jpeg extends AbstractImage
 {
-
     protected $_width;
     protected $_height;
     protected $_imageProperties;
@@ -39,8 +39,10 @@ class Jpeg extends AbstractImage
         }
 
         $gd_options = gd_info();
-        if ((!isset($gd_options['JPG Support']) || $gd_options['JPG Support'] != true) &&
-            (!isset($gd_options['JPEG Support']) || $gd_options['JPEG Support'] != true)) {
+        if (
+            (!isset($gd_options['JPG Support']) || $gd_options['JPG Support'] != true) &&
+            (!isset($gd_options['JPEG Support']) || $gd_options['JPEG Support'] != true)
+        ) {
             throw new Exception\RuntimeException('JPG support is not configured properly.');
         }
 
@@ -93,7 +95,7 @@ class Jpeg extends AbstractImage
 
         $this->_width = $imageInfo[0];
         $this->_height = $imageInfo[1];
-        $this->_imageProperties = array();
+        $this->_imageProperties = [];
         $this->_imageProperties['bitDepth'] = $imageInfo['bits'];
         $this->_imageProperties['jpegImageType'] = $imageInfo[2];
         $this->_imageProperties['jpegColorType'] = $imageInfo['channels'];

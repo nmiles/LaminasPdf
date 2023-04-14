@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -153,17 +154,21 @@ class StructureParser
                         case 'f':
                             // free entry
                             unset($this->_refTable[$objNum . ' ' . $genNumber . ' R']);
-                            $refTable->addReference($objNum . ' ' . $genNumber . ' R',
+                            $refTable->addReference(
+                                $objNum . ' ' . $genNumber . ' R',
                                 $objectOffset,
-                                false);
+                                false
+                            );
                             break;
 
                         case 'n':
                             // in-use entry
 
-                            $refTable->addReference($objNum . ' ' . $genNumber . ' R',
+                            $refTable->addReference(
+                                $objNum . ' ' . $genNumber . ' R',
                                 $objectOffset,
-                                true);
+                                true
+                            );
                     }
 
                     if (!DataParser::isWhiteSpace(ord($this->_stringParser->data[$this->_stringParser->offset]))) {
@@ -214,7 +219,7 @@ class StructureParser
                 if ($trailerDict->Index->getType() != InternalType\AbstractTypeObject::TYPE_ARRAY) {
                     throw new Exception\CorruptedPdfException(sprintf('PDF file syntax error. Offset - 0x%X. Cross reference stream dictionary Index entry must be an array.', $offset));
                 }
-                $sections = count($trailerDict->Index->items) / 2;
+                $sections = (is_countable($trailerDict->Index->items) ? count($trailerDict->Index->items) : 0) / 2;
             } else {
                 $sections = 1;
             }
@@ -290,8 +295,10 @@ class StructureParser
 
 
         $trailerObj = new Trailer\Parsed($trailerDict, $context);
-        if ($trailerDict->Prev instanceof InternalType\NumericObject ||
-            $trailerDict->Prev instanceof InternalType\IndirectObjectReference) {
+        if (
+            $trailerDict->Prev instanceof InternalType\NumericObject ||
+            $trailerDict->Prev instanceof InternalType\IndirectObjectReference
+        ) {
             $trailerObj->setPrev($this->_loadXRefTable($trailerDict->Prev->value));
             $context->getRefTable()->setParent($trailerObj->getPrev()->getRefTable());
         }
@@ -356,7 +363,8 @@ class StructureParser
         }
 
         $pdfVersion = substr($pdfVersionComment, 5);
-        if (version_compare($pdfVersion, '0.9', '<') ||
+        if (
+            version_compare($pdfVersion, '0.9', '<') ||
             version_compare($pdfVersion, '1.61', '>=')
         ) {
             /**
@@ -370,8 +378,10 @@ class StructureParser
         $this->_pdfVersion = $pdfVersion;
 
         $this->_stringParser->offset = strrpos($this->_stringParser->data, '%%EOF');
-        if ($this->_stringParser->offset === false ||
-            strlen($this->_stringParser->data) - $this->_stringParser->offset > 7) {
+        if (
+            $this->_stringParser->offset === false ||
+            strlen($this->_stringParser->data) - $this->_stringParser->offset > 7
+        ) {
             throw new Exception\CorruptedPdfException('PDF file syntax error. End-of-fle marker expected at the end of file.');
         }
 
@@ -379,22 +389,28 @@ class StructureParser
         /**
          * Go to end of cross-reference table offset
          */
-        while (DataParser::isWhiteSpace(ord($this->_stringParser->data[$this->_stringParser->offset])) &&
-            ($this->_stringParser->offset > 0)) {
+        while (
+            DataParser::isWhiteSpace(ord($this->_stringParser->data[$this->_stringParser->offset])) &&
+            ($this->_stringParser->offset > 0)
+        ) {
             $this->_stringParser->offset--;
         }
         /**
          * Go to the start of cross-reference table offset
          */
-        while ((!DataParser::isWhiteSpace(ord($this->_stringParser->data[$this->_stringParser->offset]))) &&
-            ($this->_stringParser->offset > 0)) {
+        while (
+            (!DataParser::isWhiteSpace(ord($this->_stringParser->data[$this->_stringParser->offset]))) &&
+            ($this->_stringParser->offset > 0)
+        ) {
             $this->_stringParser->offset--;
         }
         /**
          * Go to the end of 'startxref' keyword
          */
-        while (DataParser::isWhiteSpace(ord($this->_stringParser->data[$this->_stringParser->offset])) &&
-            ($this->_stringParser->offset > 0)) {
+        while (
+            DataParser::isWhiteSpace(ord($this->_stringParser->data[$this->_stringParser->offset])) &&
+            ($this->_stringParser->offset > 0)
+        ) {
             $this->_stringParser->offset--;
         }
         /**

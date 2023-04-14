@@ -36,7 +36,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFNameBadString()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Null character is not allowed');
         $nameObj = new InternalType\NameObject("MyName\x00");
     }

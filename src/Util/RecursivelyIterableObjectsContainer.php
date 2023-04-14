@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -18,7 +19,7 @@ namespace LaminasPdf\Util;
  */
 class RecursivelyIterableObjectsContainer implements \RecursiveIterator, \Countable
 {
-    protected $_objects = array();
+    protected $_objects = [];
 
     public function __construct(array $objects)
     {

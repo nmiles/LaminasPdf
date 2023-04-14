@@ -63,11 +63,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnescapeOctal()
     {
-        $input = array(
-            0304 => '\\304',
-            0326 => '\\326',
-            0334 => '\\334'
-        );
+        $input = [0304 => '\\304', 0326 => '\\326', 0334 => '\\334'];
         foreach ($input as $k => $v) {
             $this->assertEquals(InternalType\StringObject::unescape($v),
                 chr($k), 'expected German Umlaut');

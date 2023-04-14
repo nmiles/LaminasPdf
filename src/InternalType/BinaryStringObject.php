@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -49,7 +50,7 @@ class BinaryStringObject extends StringObject
      */
     public static function unescape($inStr)
     {
-        $chunks = array();
+        $chunks = [];
         $offset = 0;
         $length = 0;
         while ($offset < strlen($inStr)) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -72,7 +73,7 @@ abstract class AbstractDataSource
      * the request or if an error occurs.
      *
      * @param integer $byteCount Number of bytes to read.
-     * @return string
+     * @return String_
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
     abstract public function readBytes($byteCount);
@@ -85,7 +86,7 @@ abstract class AbstractDataSource
      * other additional pointers (such as the seek position of a file pointer)
      * that might be used.
      *
-     * @return string
+     * @return String_
      */
     abstract public function readAllBytes();
 
@@ -98,11 +99,11 @@ abstract class AbstractDataSource
      * Subclasses should override this method to provide a more specific
      * description of the actual object being represented.
      *
-     * @return string
+     * @return String_
      */
     public function __toString()
     {
-        return get_called_class();
+        return static::class;
     }
 
 

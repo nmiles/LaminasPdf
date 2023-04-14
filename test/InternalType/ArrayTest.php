@@ -36,7 +36,7 @@ class ArrayTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFArray2()
     {
-        $srcArray = array();
+        $srcArray = [];
         $srcArray[] = new InternalType\BooleanObject(false);
         $srcArray[] = new InternalType\NumericObject(100.426);
         $srcArray[] = new InternalType\NameObject('MyName');
@@ -49,17 +49,17 @@ class ArrayTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFArrayBadInput1()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Argument must be an array');
         $arrayObj = new InternalType\ArrayObject(346);
     }
 
     public function testPDFArrayBadInput2()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Array elements must be \LaminasPdf\InternalType\AbstractTypeObject objects');
 
-        $srcArray = array();
+        $srcArray = [];
         $srcArray[] = new InternalType\BooleanObject(false);
         $srcArray[] = new InternalType\NumericObject(100.426);
         $srcArray[] = new InternalType\NameObject('MyName');
@@ -77,7 +77,7 @@ class ArrayTest extends \PHPUnit\Framework\TestCase
 
     public function testToString()
     {
-        $srcArray = array();
+        $srcArray = [];
         $srcArray[] = new InternalType\BooleanObject(false);
         $srcArray[] = new InternalType\NumericObject(100.426);
         $srcArray[] = new InternalType\NameObject('MyName');

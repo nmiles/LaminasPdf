@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -73,11 +74,12 @@ class IndirectObjectReference extends AbstractTypeObject
      * @param \LaminasPdf\ObjectFactory $factory
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
-    public function __construct($objNum,
-                                $genNum = 0,
-                                IndirectObjectReference\Context $context,
-                                Pdf\ObjectFactory $factory)
-    {
+    public function __construct(
+        $objNum,
+        $genNum,
+        IndirectObjectReference\Context $context,
+        Pdf\ObjectFactory $factory
+    ) {
         if (!(is_integer($objNum) && $objNum > 0)) {
             throw new Exception\RuntimeException('Object number must be positive integer');
         }
@@ -261,7 +263,7 @@ class IndirectObjectReference extends AbstractTypeObject
             $this->_dereference();
         }
 
-        return call_user_func_array(array($this->_ref, $method), $args);
+        return call_user_func_array([$this->_ref, $method], $args);
     }
 
     /**

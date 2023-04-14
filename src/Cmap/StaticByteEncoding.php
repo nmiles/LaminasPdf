@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -42,5 +43,4 @@ class StaticByteEncoding extends ByteEncoding
         }
         $this->_glyphIndexArray = $cmapData;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -69,6 +70,7 @@ abstract class AbstractCidFont extends FontResource\AbstractFont
      */
     public function __construct(Pdf\BinaryParser\Font\OpenType\AbstractOpenType $fontParser)
     {
+        $sequenceStartCode = null;
         parent::__construct();
 
         $fontParser->parse();
@@ -109,7 +111,7 @@ abstract class AbstractCidFont extends FontResource\AbstractFont
         /* Constract characters widths array using font CMap and glyphs widths array */
         $glyphWidths = $fontParser->glyphWidths;
         $charGlyphs = $this->_cmap->getCoveredCharactersGlyphs();
-        $charWidths = array();
+        $charWidths = [];
         foreach ($charGlyphs as $charCode => $glyph) {
             $charWidths[$charCode] = $glyphWidths[$glyph];
         }
@@ -141,15 +143,15 @@ abstract class AbstractCidFont extends FontResource\AbstractFont
 
         /* Width array optimization. Step2: Compact character codes sequences */
         $lastCharCode = -1;
-        $widthsSequences = array();
+        $widthsSequences = [];
         foreach ($charWidths as $charCode => $width) {
             if ($lastCharCode == -1) {
-                $charCodesSequense = array();
+                $charCodesSequense = [];
                 $sequenceStartCode = $charCode;
             } elseif ($charCode != $lastCharCode + 1) {
                 // New chracters sequence detected
                 $widthsSequences[$sequenceStartCode] = $charCodesSequense;
-                $charCodesSequense = array();
+                $charCodesSequense = [];
                 $sequenceStartCode = $charCode;
             }
             $charCodesSequense[] = $width;
@@ -160,10 +162,10 @@ abstract class AbstractCidFont extends FontResource\AbstractFont
             $widthsSequences[$sequenceStartCode] = $charCodesSequense;
         }
 
-        $pdfCharsWidths = array();
+        $pdfCharsWidths = [];
         foreach ($widthsSequences as $startCode => $widthsSequence) {
             /* Width array optimization. Step3: Compact widths sequences */
-            $pdfWidths = array();
+            $pdfWidths = [];
             $lastWidth = -1;
             $widthsInSequence = 0;
             foreach ($widthsSequence as $width) {
@@ -201,7 +203,7 @@ abstract class AbstractCidFont extends FontResource\AbstractFont
 
                             // Reset widths collection
                             $startCode += count($pdfWidths);
-                            $pdfWidths = array();
+                            $pdfWidths = [];
                         }
 
                         $widthsInSequence = 2;
@@ -358,7 +360,7 @@ abstract class AbstractCidFont extends FontResource\AbstractFont
      */
     public function widthsForChars($charCodes)
     {
-        $widths = array();
+        $widths = [];
         foreach ($charCodes as $key => $charCode) {
             if (!isset($this->_charWidths[$charCode])) {
                 $widths[$key] = $this->_missingCharWidth;

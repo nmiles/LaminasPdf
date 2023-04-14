@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -24,10 +25,10 @@ class Markup extends AbstractAnnotation
     /**
      * Annotation subtypes
      */
-    const SUBTYPE_HIGHLIGHT = 'Highlight';
-    const SUBTYPE_UNDERLINE = 'Underline';
-    const SUBTYPE_SQUIGGLY = 'Squiggly';
-    const SUBTYPE_STRIKEOUT = 'StrikeOut';
+    public const SUBTYPE_HIGHLIGHT = 'Highlight';
+    public const SUBTYPE_UNDERLINE = 'Underline';
+    public const SUBTYPE_SQUIGGLY = 'Squiggly';
+    public const SUBTYPE_STRIKEOUT = 'StrikeOut';
 
     /**
      * Annotation object constructor
@@ -40,13 +41,14 @@ class Markup extends AbstractAnnotation
             throw new Exception\CorruptedPdfException('Annotation dictionary resource has to be a dictionary.');
         }
 
-        if ($annotationDictionary->Subtype === null ||
+        if (
+            $annotationDictionary->Subtype === null ||
             $annotationDictionary->Subtype->getType() != InternalType\AbstractTypeObject::TYPE_NAME ||
-            !in_array($annotationDictionary->Subtype->value,
-                array(self::SUBTYPE_HIGHLIGHT,
-                    self::SUBTYPE_UNDERLINE,
-                    self::SUBTYPE_SQUIGGLY,
-                    self::SUBTYPE_STRIKEOUT))) {
+            !in_array(
+                $annotationDictionary->Subtype->value,
+                [self::SUBTYPE_HIGHLIGHT, self::SUBTYPE_UNDERLINE, self::SUBTYPE_SQUIGGLY, self::SUBTYPE_STRIKEOUT]
+            )
+        ) {
             throw new Exception\CorruptedPdfException('Subtype => Markup entry is omitted or has wrong value.');
         }
 

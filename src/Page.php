@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -28,22 +29,22 @@ class Page
     /**
      * Size representing an A4 page in portrait (tall) orientation.
      */
-    const SIZE_A4 = '595:842:';
+    public const SIZE_A4 = '595:842:';
 
     /**
      * Size representing an A4 page in landscape (wide) orientation.
      */
-    const SIZE_A4_LANDSCAPE = '842:595:';
+    public const SIZE_A4_LANDSCAPE = '842:595:';
 
     /**
      * Size representing a US Letter page in portrait (tall) orientation.
      */
-    const SIZE_LETTER = '612:792:';
+    public const SIZE_LETTER = '612:792:';
 
     /**
      * Size representing a US Letter page in landscape (wide) orientation.
      */
-    const SIZE_LETTER_LANDSCAPE = '792:612:';
+    public const SIZE_LETTER_LANDSCAPE = '792:612:';
 
 
     /* Shape Drawing */
@@ -51,17 +52,17 @@ class Page
     /**
      * Stroke the path only. Do not fill.
      */
-    const SHAPE_DRAW_STROKE = 0;
+    public const SHAPE_DRAW_STROKE = 0;
 
     /**
      * Fill the path only. Do not stroke.
      */
-    const SHAPE_DRAW_FILL = 1;
+    public const SHAPE_DRAW_FILL = 1;
 
     /**
      * Fill and stroke the path.
      */
-    const SHAPE_DRAW_FILL_AND_STROKE = 2;
+    public const SHAPE_DRAW_FILL_AND_STROKE = 2;
 
 
     /* Shape Filling Methods */
@@ -69,12 +70,12 @@ class Page
     /**
      * Fill the path using the non-zero winding rule.
      */
-    const FILL_METHOD_NON_ZERO_WINDING = 0;
+    public const FILL_METHOD_NON_ZERO_WINDING = 0;
 
     /**
      * Fill the path using the even-odd rule.
      */
-    const FILL_METHOD_EVEN_ODD = 1;
+    public const FILL_METHOD_EVEN_ODD = 1;
 
 
     /* Line Dash Types */
@@ -82,7 +83,7 @@ class Page
     /**
      * Solid line dash.
      */
-    const LINE_DASHING_SOLID = 0;
+    public const LINE_DASHING_SOLID = 0;
 
 
     /**
@@ -197,7 +198,8 @@ class Page
      */
     public function __construct($param1, $param2 = null, $param3 = null)
     {
-        if (($param1 instanceof InternalType\IndirectObjectReference ||
+        if (
+            ($param1 instanceof InternalType\IndirectObjectReference ||
                 $param1 instanceof InternalType\IndirectObject
             ) &&
             $param1->getType() == InternalType\AbstractTypeObject::TYPE_DICTIONARY &&
@@ -221,7 +223,6 @@ class Page
                 default:
                     throw new Exception\CorruptedPdfException('Unrecognized object type.');
                     break;
-
             }
         } elseif ($param1 instanceof Page && $param2 === null && $param3 === null) {
             // Clone existing page.
@@ -254,9 +255,11 @@ class Page
             }
 
             return;
-        } elseif (is_string($param1) &&
+        } elseif (
+            is_string($param1) &&
             ($param2 === null || $param2 instanceof ObjectFactory) &&
-            $param3 === null) {
+            $param3 === null
+        ) {
             if ($param2 !== null) {
                 $this->_objFactory = $param2;
             } else {
@@ -297,9 +300,10 @@ class Page
             /**
              * @todo support of pagesize recalculation to "default user space units"
              */
-
-        } elseif (is_numeric($param1) && is_numeric($param2) &&
-            ($param3 === null || $param3 instanceof ObjectFactory)) {
+        } elseif (
+            is_numeric($param1) && is_numeric($param2) &&
+            ($param3 === null || $param3 instanceof ObjectFactory)
+        ) {
             if ($param3 !== null) {
                 $this->_objFactory = $param3;
             } else {
@@ -311,7 +315,6 @@ class Page
             /** New page created. That's users App responsibility to track GS changes */
             $pageWidth = $param1;
             $pageHeight = $param2;
-
         } else {
             throw new Exception\BadMethodCallException('Unrecognized method signature, wrong number of arguments or wrong argument types.');
         }
@@ -397,16 +400,18 @@ class Page
     public function __clone()
     {
         $factory = ObjectFactory::createFactory(1);
-        $processed = array();
+        $processed = [];
 
         // Clone dictionary object.
         // Do it explicitly to prevent sharing page attributes between different
         // results of clonePage() operation (other resources are still shared)
         $dictionary = new InternalType\DictionaryObject();
         foreach ($this->_pageDictionary->getKeys() as $key) {
-            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory,
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone(
+                $factory,
                 $processed,
-                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES);
+                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES
+            );
         }
 
         $this->_pageDictionary = $factory->newObject($dictionary);
@@ -432,9 +437,11 @@ class Page
         // results of clonePage() operation (other resources are still shared)
         $dictionary = new InternalType\DictionaryObject();
         foreach ($this->_pageDictionary->getKeys() as $key) {
-            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory,
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone(
+                $factory,
                 $processed,
-                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES);
+                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES
+            );
         }
 
         $clonedPage = new Page($factory->newObject($dictionary), $factory);
@@ -485,7 +492,7 @@ class Page
             $this->_pageDictionary->Contents->touch();
         }
 
-        if ((!$this->_safeGS) && (count($this->_pageDictionary->Contents->items) != 0)) {
+        if ((!$this->_safeGS) && ((is_countable($this->_pageDictionary->Contents->items) ? count($this->_pageDictionary->Contents->items) : 0) != 0)) {
             /**
              * Page already has some content which is not treated as safe.
              *
@@ -595,7 +602,7 @@ class Page
         $this->_addProcSet('PDF');
 
         if ($pattern === self::LINE_DASHING_SOLID) {
-            $pattern = array();
+            $pattern = [];
             $phase = 0;
         }
 
@@ -650,7 +657,7 @@ class Page
         if ($style->getFont() !== null) {
             $this->setFont($style->getFont(), $style->getFontSize());
         }
-        $this->_contents .= $style->instructions($this->_pageDictionary->Resources);
+        $this->_contents .= $style->instructions();
 
         return $this;
     }
@@ -672,8 +679,7 @@ class Page
      */
     public function setAlpha($alpha, $mode = 'Normal')
     {
-        if (!in_array($mode, array('Normal', 'Multiply', 'Screen', 'Overlay', 'Darken', 'Lighten', 'ColorDodge',
-            'ColorBurn', 'HardLight', 'SoftLight', 'Difference', 'Exclusion'))) {
+        if (!in_array($mode, ['Normal', 'Multiply', 'Screen', 'Overlay', 'Darken', 'Lighten', 'ColorDodge', 'ColorBurn', 'HardLight', 'SoftLight', 'Difference', 'Exclusion'])) {
             throw new Exception\InvalidArgumentException('Unsupported transparency mode.');
         }
         if (!is_numeric($alpha) || $alpha < 0 || $alpha > 1) {
@@ -752,24 +758,26 @@ class Page
         if ($this->_pageDictionary->Resources->Font === null) {
             // Page doesn't have any font attached
             // Return empty array
-            return array();
+            return [];
         }
 
         $fontResources = $this->_pageDictionary->Resources->Font;
 
-        $fontResourcesUnique = array();
+        $fontResourcesUnique = [];
         foreach ($fontResources->getKeys() as $fontResourceName) {
             $fontDictionary = $fontResources->$fontResourceName;
 
-            if (!($fontDictionary instanceof InternalType\IndirectObjectReference ||
-                $fontDictionary instanceof InternalType\IndirectObject)) {
+            if (
+                !($fontDictionary instanceof InternalType\IndirectObjectReference ||
+                $fontDictionary instanceof InternalType\IndirectObject)
+            ) {
                 throw new Exception\CorruptedPdfException('Font dictionary has to be an indirect object or object reference.');
             }
 
             $fontResourcesUnique[spl_object_hash($fontDictionary->getObject())] = $fontDictionary;
         }
 
-        $fonts = array();
+        $fonts = [];
         foreach ($fontResourcesUnique as $resourceId => $fontDictionary) {
             try {
                 // Try to extract font
@@ -804,13 +812,15 @@ class Page
 
         $fontResources = $this->_pageDictionary->Resources->Font;
 
-        $fontResourcesUnique = array();
+        $fontResourcesUnique = [];
 
         foreach ($fontResources->getKeys() as $fontResourceName) {
             $fontDictionary = $fontResources->$fontResourceName;
 
-            if (!($fontDictionary instanceof InternalType\IndirectObjectReference ||
-                $fontDictionary instanceof InternalType\IndirectObject)) {
+            if (
+                !($fontDictionary instanceof InternalType\IndirectObjectReference ||
+                $fontDictionary instanceof InternalType\IndirectObject)
+            ) {
                 throw new Exception\CorruptedPdfException('Font dictionary has to be an indirect object or object reference.');
             }
 
@@ -911,9 +921,14 @@ class Page
      */
     public function clipCircle($x, $y, $radius, $startAngle = null, $endAngle = null)
     {
-        $this->clipEllipse($x - $radius, $y - $radius,
-            $x + $radius, $y + $radius,
-            $startAngle, $endAngle);
+        $this->clipEllipse(
+            $x - $radius,
+            $y - $radius,
+            $x + $radius,
+            $y + $radius,
+            $startAngle,
+            $endAngle
+        );
 
         return $this;
     }
@@ -1024,6 +1039,7 @@ class Page
      */
     public function clipPolygon($x, $y, $fillMethod = self::FILL_METHOD_NON_ZERO_WINDING)
     {
+        $path = null;
         $this->_addProcSet('PDF');
 
         $firstPoint = true;
@@ -1118,9 +1134,15 @@ class Page
      */
     public function drawCircle($x, $y, $radius, $param4 = null, $param5 = null, $param6 = null)
     {
-        $this->drawEllipse($x - $radius, $y - $radius,
-            $x + $radius, $y + $radius,
-            $param4, $param5, $param6);
+        $this->drawEllipse(
+            $x - $radius,
+            $y - $radius,
+            $x + $radius,
+            $y + $radius,
+            $param4,
+            $param5,
+            $param6
+        );
 
         return $this;
     }
@@ -1342,10 +1364,13 @@ class Page
      * @param integer $fillMethod
      * @return \LaminasPdf\Page
      */
-    public function drawPolygon($x, $y,
-                                $fillType = self::SHAPE_DRAW_FILL_AND_STROKE,
-                                $fillMethod = self::FILL_METHOD_NON_ZERO_WINDING)
-    {
+    public function drawPolygon(
+        $x,
+        $y,
+        $fillType = self::SHAPE_DRAW_FILL_AND_STROKE,
+        $fillMethod = self::FILL_METHOD_NON_ZERO_WINDING
+    ) {
+        $path = null;
         $this->_addProcSet('PDF');
 
         $firstPoint = true;
@@ -1450,14 +1475,19 @@ class Page
      * @param integer $fillType
      * @return \LaminasPdf\Page
      */
-    public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius,
-                                         $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
-    {
+    public function drawRoundedRectangle(
+        $x1,
+        $y1,
+        $x2,
+        $y2,
+        $radius,
+        $fillType = self::SHAPE_DRAW_FILL_AND_STROKE
+    ) {
 
         $this->_addProcSet('PDF');
 
         if (!is_array($radius)) {
-            $radius = array($radius, $radius, $radius, $radius);
+            $radius = [$radius, $radius, $radius, $radius];
         } else {
             for ($i = 0; $i < 4; $i++) {
                 if (!isset($radius[$i])) {
@@ -1608,8 +1638,10 @@ class Page
     public function attachAnnotation(Annotation\AbstractAnnotation $annotation)
     {
         $annotationDictionary = $annotation->getResource();
-        if (!$annotationDictionary instanceof InternalType\IndirectObject &&
-            !$annotationDictionary instanceof InternalType\IndirectObjectReference) {
+        if (
+            !$annotationDictionary instanceof InternalType\IndirectObject &&
+            !$annotationDictionary instanceof InternalType\IndirectObjectReference
+        ) {
             $annotationDictionary = $this->_objFactory->newObject($annotationDictionary);
         }
 

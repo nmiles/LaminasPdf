@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -28,7 +29,7 @@ class DictionaryObject extends AbstractTypeObject
      *
      * @var array
      */
-    private $_items = array();
+    private $_items = [];
 
 
     /**
@@ -88,8 +89,7 @@ class DictionaryObject extends AbstractTypeObject
      */
     public function __get($item)
     {
-        $element = isset($this->_items[$item]) ? $this->_items[$item]
-            : null;
+        $element = $this->_items[$item] ?? null;
 
         return $element;
     }
@@ -166,7 +166,8 @@ class DictionaryObject extends AbstractTypeObject
                 return new NullObject();
             }
 
-            if ($this->_items['Type']->value == 'Page' &&
+            if (
+                $this->_items['Type']->value == 'Page' &&
                 $mode == AbstractTypeObject::CLONE_MODE_SKIP_PAGES
             ) {
                 // It's a page node, skip it
@@ -205,7 +206,7 @@ class DictionaryObject extends AbstractTypeObject
      */
     public function toPhp()
     {
-        $phpArray = array();
+        $phpArray = [];
 
         foreach ($this->_items as $itemName => $item) {
             $phpArray[$itemName] = $item->toPhp();

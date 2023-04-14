@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -74,16 +75,18 @@ abstract class AbstractResource
     public function __clone()
     {
         $factory = \LaminasPdf\ObjectFactory::createFactory(1);
-        $processed = array();
+        $processed = [];
 
         // Clone dictionary object.
         // Do it explicitly to prevent sharing page attributes between different
         // results of clonePage() operation (other resources are still shared)
         $dictionary = new InternalType\DictionaryObject();
         foreach ($this->_pageDictionary->getKeys() as $key) {
-            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory,
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone(
+                $factory,
                 $processed,
-                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES);
+                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES
+            );
         }
 
         $this->_pageDictionary = $factory->newObject($dictionary);
@@ -109,9 +112,11 @@ abstract class AbstractResource
         // results of clonePage() operation (other resources are still shared)
         $dictionary = new InternalType\DictionaryObject();
         foreach ($this->_pageDictionary->getKeys() as $key) {
-            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory,
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone(
+                $factory,
                 $processed,
-                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES);
+                InternalType\AbstractTypeObject::CLONE_MODE_SKIP_PAGES
+            );
         }
 
         $clonedPage = new Pdf\Page($factory->newObject($dictionary), $factory);

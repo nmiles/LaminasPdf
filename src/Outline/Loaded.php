@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -42,7 +43,7 @@ class Loaded extends AbstractOutline
      *
      * @var array
      */
-    protected $_originalChildOutlines = array();
+    protected $_originalChildOutlines = [];
 
     /**
      * Get outline title.
@@ -83,7 +84,7 @@ class Loaded extends AbstractOutline
 
         if ($this->_outlineDictionary->Count === null) {
             // Do Nothing.
-            return this;
+            return $this;
         }
 
         $childrenCount = $this->_outlineDictionary->Count->value;
@@ -198,9 +199,7 @@ class Loaded extends AbstractOutline
             $this->_outlineDictionary->C = null;
         } else {
             $components = $color->getComponents();
-            $colorComponentElements = array(new InternalType\NumericObject($components[0]),
-                new InternalType\NumericObject($components[1]),
-                new InternalType\NumericObject($components[2]));
+            $colorComponentElements = [new InternalType\NumericObject($components[0]), new InternalType\NumericObject($components[1]), new InternalType\NumericObject($components[2])];
             $this->_outlineDictionary->C = new InternalType\ArrayObject($colorComponentElements);
         }
 
@@ -341,12 +340,13 @@ class Loaded extends AbstractOutline
      * @throws \LaminasPdf\Exception\ExceptionInterface
      * @internal
      */
-    public function dumpOutline(ObjectFactory $factory,
-                                $updateNavigation,
-                                InternalType\AbstractTypeObject $parent,
-                                InternalType\AbstractTypeObject $prev = null,
-                                \SplObjectStorage $processedOutlines = null)
-    {
+    public function dumpOutline(
+        ObjectFactory $factory,
+        $updateNavigation,
+        InternalType\AbstractTypeObject $parent,
+        InternalType\AbstractTypeObject $prev = null,
+        \SplObjectStorage $processedOutlines = null
+    ) {
         if ($processedOutlines === null) {
             $processedOutlines = new \SplObjectStorage();
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -41,7 +42,7 @@ abstract class AbstractOutline implements
      *
      * @var array
      */
-    public $childOutlines = array();
+    public $childOutlines = [];
 
 
     /**
@@ -151,12 +152,7 @@ abstract class AbstractOutline implements
      */
     public function getOptions()
     {
-        return array('title' => $this->_title,
-            'open' => $this->_open,
-            'color' => $this->_color,
-            'italic' => $this->_italic,
-            'bold' => $this->_bold,
-            'target' => $this->_target);
+        return ['title' => $this->_title, 'open' => $this->_open, 'color' => $this->_color, 'italic' => $this->_italic, 'bold' => $this->_bold, 'target' => $this->_target];
     }
 
     /**
@@ -229,8 +225,7 @@ abstract class AbstractOutline implements
                 throw new Exception\InvalidArgumentException('Outline create method takes $title (string) and $target (\LaminasPdf\InternalStructure\NavigationTarget or string) or an array as an input');
             }
 
-            return new Created(array('title' => $param1,
-                'target' => $param2));
+            return new Created(['title' => $param1, 'target' => $param2]);
         } else {
             if (!is_array($param1) || $param2 !== null) {
                 throw new Exception\InvalidArgumentException('Outline create method takes $title (string) and $destination (\LaminasPdf\InternalStructure\NavigationTarget) or an array as an input');
@@ -271,11 +266,13 @@ abstract class AbstractOutline implements
      * @param SplObjectStorage $processedOutlines List of already processed outlines
      * @return \LaminasPdf\InternalType\AbstractTypeObject
      */
-    abstract public function dumpOutline(ObjectFactory $factory,
-                                         $updateNavigation,
-                                         InternalType\AbstractTypeObject $parent,
-                                         InternalType\AbstractTypeObject $prev = null,
-                                         \SplObjectStorage $processedOutlines = null);
+    abstract public function dumpOutline(
+        ObjectFactory $factory,
+        $updateNavigation,
+        InternalType\AbstractTypeObject $parent,
+        InternalType\AbstractTypeObject $prev = null,
+        \SplObjectStorage $processedOutlines = null
+    );
 
 
     ////////////////////////////////////////////////////////////////////////

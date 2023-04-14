@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -34,12 +35,12 @@ abstract class AbstractBinaryParser
     /**
      * Little-endian byte order (0x04 0x03 0x02 0x01).
      */
-    const BYTE_ORDER_LITTLE_ENDIAN = 0;
+    public const BYTE_ORDER_LITTLE_ENDIAN = 0;
 
     /**
      * Big-endian byte order (0x01 0x02 0x03 0x04).
      */
-    const BYTE_ORDER_BIG_ENDIAN = 1;
+    public const BYTE_ORDER_BIG_ENDIAN = 1;
 
 
     /**** Instance Variables ****/
@@ -341,9 +342,11 @@ abstract class AbstractBinaryParser
      * @return float
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
-    public function readFixed($mantissaBits, $fractionBits,
-                              $byteOrder = self::BYTE_ORDER_BIG_ENDIAN)
-    {
+    public function readFixed(
+        $mantissaBits,
+        $fractionBits,
+        $byteOrder = self::BYTE_ORDER_BIG_ENDIAN
+    ) {
         $bitsToRead = $mantissaBits + $fractionBits;
         if (($bitsToRead % 8) !== 0) {
             throw new Exception\BinaryParserException('Fixed-point numbers are whole bytes');
@@ -377,10 +380,11 @@ abstract class AbstractBinaryParser
      * @todo Consider changing $byteCount to a character count. They are not
      *   always equivalent (in the case of surrogates).
      */
-    public function readStringUTF16($byteCount,
-                                    $byteOrder = self::BYTE_ORDER_BIG_ENDIAN,
-                                    $characterSet = '')
-    {
+    public function readStringUTF16(
+        $byteCount,
+        $byteOrder = self::BYTE_ORDER_BIG_ENDIAN,
+        $characterSet = ''
+    ) {
         if ($byteCount == 0) {
             return '';
         }
@@ -425,7 +429,7 @@ abstract class AbstractBinaryParser
         if ($characterSet == 'MacRoman') {
             return $bytes;
         }
-        return iconv('MacRoman', $characterSet, $bytes);
+        return iconv('macintosh', $characterSet, $bytes);
     }
 
     /**

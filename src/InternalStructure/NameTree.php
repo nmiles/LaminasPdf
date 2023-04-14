@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -32,12 +33,12 @@ class NameTree implements ArrayAccess, Countable, Iterator
      *
      * @var array
      */
-    protected $_items = array();
+    protected $_items = [];
 
     /**
      * Object constructor
      *
-     * @param $rootDictionary root of name dictionary
+     * @param $rootDictionary $rootDictionary of name dictionary
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
     public function __construct(InternalType\AbstractTypeObject $rootDictionary)
@@ -46,8 +47,8 @@ class NameTree implements ArrayAccess, Countable, Iterator
             throw new Exception\CorruptedPdfException('Name tree root must be a dictionary.');
         }
 
-        $intermediateNodes = array();
-        $leafNodes = array();
+        $intermediateNodes = [];
+        $leafNodes = [];
         if ($rootDictionary->Kids !== null) {
             $intermediateNodes[] = $rootDictionary;
         } else {
@@ -55,7 +56,7 @@ class NameTree implements ArrayAccess, Countable, Iterator
         }
 
         while (count($intermediateNodes) != 0) {
-            $newIntermediateNodes = array();
+            $newIntermediateNodes = [];
             foreach ($intermediateNodes as $node) {
                 foreach ($node->Kids->items as $childNode) {
                     if ($childNode->Kids !== null) {
@@ -69,7 +70,7 @@ class NameTree implements ArrayAccess, Countable, Iterator
         }
 
         foreach ($leafNodes as $leafNode) {
-            $destinationsCount = count($leafNode->Names->items) / 2;
+            $destinationsCount = (is_countable($leafNode->Names->items) ? count($leafNode->Names->items) : 0) / 2;
             for ($count = 0; $count < $destinationsCount; $count++) {
                 $this->_items[$leafNode->Names->items[$count * 2]->value] = $leafNode->Names->items[$count * 2 + 1];
             }
@@ -136,7 +137,7 @@ class NameTree implements ArrayAccess, Countable, Iterator
 
     public function clear()
     {
-        $this->_items = array();
+        $this->_items = [];
     }
 
     public function count()

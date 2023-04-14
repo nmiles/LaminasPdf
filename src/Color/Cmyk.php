@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -121,6 +122,6 @@ class Cmyk implements ColorInterface
      */
     public function getComponents()
     {
-        return array($this->_c->value, $this->_m->value, $this->_y->value, $this->_k->value);
+        return [$this->_c->value, $this->_m->value, $this->_y->value, $this->_k->value];
     }
 }

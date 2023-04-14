@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -49,7 +50,7 @@ class DataParser
      *
      * @var array
      */
-    private $_elements = array();
+    private $_elements = [];
 
     /**
      * PDF objects factory.
@@ -67,7 +68,7 @@ class DataParser
     public function cleanUp()
     {
         $this->_context = null;
-        $this->_elements = array();
+        $this->_elements = [];
         $this->_objFactory = null;
     }
 
@@ -79,7 +80,8 @@ class DataParser
      */
     public static function isWhiteSpace($chCode)
     {
-        if ($chCode == 0x00 || // null character
+        if (
+            $chCode == 0x00 || // null character
             $chCode == 0x09 || // Tab
             $chCode == 0x0A || // Line feed
             $chCode == 0x0C || // Form Feed
@@ -101,7 +103,8 @@ class DataParser
      */
     public static function isDelimiter($chCode)
     {
-        if ($chCode == 0x28 || // '('
+        if (
+            $chCode == 0x28 || // '('
             $chCode == 0x29 || // ')'
             $chCode == 0x3C || // '<'
             $chCode == 0x3E || // '>'
@@ -162,7 +165,8 @@ class DataParser
     public function skipComment()
     {
         while ($this->offset < strlen($this->data)) {
-            if (ord($this->data[$this->offset]) != 0x0A || // Line feed
+            if (
+                ord($this->data[$this->offset]) != 0x0A || // Line feed
                 ord($this->data[$this->offset]) != 0x0d    // Carriage return
             ) {
                 $this->offset++;
@@ -187,10 +191,13 @@ class DataParser
             return '';
         }
 
-        for ($start = $this->offset;
+        for (
+            $start = $this->offset;
              $this->offset < strlen($this->data);
-             $this->offset++) {
-            if (ord($this->data[$this->offset]) == 0x0A || // Line feed
+             $this->offset++
+        ) {
+            if (
+                ord($this->data[$this->offset]) == 0x0A || // Line feed
                 ord($this->data[$this->offset]) == 0x0d    // Carriage return
             ) {
                 break;
@@ -223,9 +230,10 @@ class DataParser
             return '';
         }
 
-        if ( /* self::isDelimiter( ord($this->data[$start]) ) */
-            strpos('()<>[]{}/%', $this->data[$this->offset]) !== false) {
-
+        if (
+            /* self::isDelimiter( ord($this->data[$start]) ) */
+            strpos('()<>[]{}/%', $this->data[$this->offset]) !== false
+        ) {
             switch (substr($this->data, $this->offset, 2)) {
                 case '<<':
                     $this->offset += 2;
@@ -296,8 +304,10 @@ class DataParser
             case '{':
                 // fall through to next case
             case '}':
-                throw new Exception\CorruptedPdfException(sprintf('PDF file syntax error. Offset - 0x%X.',
-                    $this->offset));
+                throw new Exception\CorruptedPdfException(sprintf(
+                    'PDF file syntax error. Offset - 0x%X.',
+                    $this->offset
+                ));
 
             default:
                 if (strcasecmp($nextLexeme, 'true') == 0) {
@@ -358,9 +368,11 @@ class DataParser
             throw new Exception\CorruptedPdfException(sprintf('PDF file syntax error. Unexpected end of file while string reading. Offset - 0x%X. \')\' expected.', $start));
         }
 
-        return new InternalType\StringObject(InternalType\StringObject::unescape(substr($this->data,
+        return new InternalType\StringObject(InternalType\StringObject::unescape(substr(
+            $this->data,
             $start,
-            $this->offset - $start - 1)));
+            $this->offset - $start - 1
+        )));
     }
 
 
@@ -386,9 +398,12 @@ class DataParser
         }
 
         return new InternalType\BinaryStringObject(
-            InternalType\BinaryStringObject::unescape(substr($this->data,
+            InternalType\BinaryStringObject::unescape(substr(
+                $this->data,
                 $start,
-                $this->offset - $start - 1)));
+                $this->offset - $start - 1
+            ))
+        );
     }
 
 
@@ -401,7 +416,7 @@ class DataParser
      */
     private function _readArray()
     {
-        $elements = array();
+        $elements = [];
 
         while (strlen($nextLexeme = $this->readLexeme()) != 0) {
             if ($nextLexeme != ']') {
@@ -519,7 +534,7 @@ class DataParser
 
         $this->offset = $offset;
         $this->_context = $context;
-        $this->_elements = array();
+        $this->_elements = [];
 
         $objNum = $this->readLexeme();
         if (!ctype_digit($objNum)) {
@@ -577,8 +592,10 @@ class DataParser
          * 'stream' keyword must be followed by either cr-lf sequence or lf character only.
          * This restriction gives the possibility to recognize all cases exactly
          */
-        if ($this->data[$this->offset] == "\r" &&
-            $this->data[$this->offset + 1] == "\n") {
+        if (
+            $this->data[$this->offset] == "\r" &&
+            $this->data[$this->offset + 1] == "\n"
+        ) {
             $this->offset += 2;
         } elseif ($this->data[$this->offset] == "\n") {
             $this->offset++;
@@ -600,13 +617,17 @@ class DataParser
             throw new Exception\CorruptedPdfException(sprintf('PDF file syntax error. Offset - 0x%X. \'endobj\' keyword expected.', $this->offset - strlen($nextLexeme)));
         }
 
-        $obj = new InternalType\StreamObject(substr($this->data,
-            $dataOffset,
-            $streamLength),
+        $obj = new InternalType\StreamObject(
+            substr(
+                $this->data,
+                $dataOffset,
+                $streamLength
+            ),
             (int)$objNum,
             (int)$genNum,
             $this->_objFactory,
-            $objValue);
+            $objValue
+        );
 
         foreach ($this->_elements as $element) {
             $element->setParentObject($obj);

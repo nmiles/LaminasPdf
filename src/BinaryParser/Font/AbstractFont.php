@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -33,7 +34,7 @@ abstract class AbstractFont extends BinaryParser\AbstractBinaryParser
      * {@link __set()}.
      * @var array
      */
-    private $_fontProperties = array();
+    private $_fontProperties = [];
 
     /**
      * Flag indicating whether or not debug logging is active.
@@ -98,10 +99,11 @@ abstract class AbstractFont extends BinaryParser\AbstractBinaryParser
      * @todo Deal with to-dos in the parent method.
      *
      */
-    public function readStringUTF16($byteCount,
-                                    $byteOrder = BinaryParser\AbstractBinaryParser::BYTE_ORDER_BIG_ENDIAN,
-                                    $characterSet = '')
-    {
+    public function readStringUTF16(
+        $byteCount,
+        $byteOrder = BinaryParser\AbstractBinaryParser::BYTE_ORDER_BIG_ENDIAN,
+        $characterSet = ''
+    ) {
         return parent::readStringUTF16($byteCount, $byteOrder, 'UTF-16BE');
     }
 

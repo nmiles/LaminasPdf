@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -69,7 +70,7 @@ class FitBoundingBoxVertically extends AbstractExplicitDestination
      * Set left edge of the displayed page
      *
      * @param float $left
-     * @return \LaminasPdf\Action\FitBoundingBoxVertically
+     * @return FitBoundingBoxVertically
      */
     public function setLeftEdge($left)
     {

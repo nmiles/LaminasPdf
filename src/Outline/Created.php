@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -200,7 +201,7 @@ class Created extends AbstractOutline
      * @param array $options
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         if (!isset($options['title'])) {
             throw new Exception\InvalidArgumentException('Title is required.');
@@ -223,12 +224,13 @@ class Created extends AbstractOutline
      * @throws \LaminasPdf\Exception\ExceptionInterface
      * @internal
      */
-    public function dumpOutline(ObjectFactory $factory,
-                                $updateNavigation,
-                                InternalType\AbstractTypeObject $parent,
-                                InternalType\AbstractTypeObject $prev = null,
-                                \SplObjectStorage $processedOutlines = null)
-    {
+    public function dumpOutline(
+        ObjectFactory $factory,
+        $updateNavigation,
+        InternalType\AbstractTypeObject $parent,
+        InternalType\AbstractTypeObject $prev = null,
+        \SplObjectStorage $processedOutlines = null
+    ) {
         if ($processedOutlines === null) {
             $processedOutlines = new \SplObjectStorage();
         }
@@ -252,9 +254,7 @@ class Created extends AbstractOutline
         $color = $this->getColor();
         if ($color !== null) {
             $components = $color->getComponents();
-            $colorComponentElements = array(new InternalType\NumericObject($components[0]),
-                new InternalType\NumericObject($components[1]),
-                new InternalType\NumericObject($components[2]));
+            $colorComponentElements = [new InternalType\NumericObject($components[0]), new InternalType\NumericObject($components[1]), new InternalType\NumericObject($components[2])];
             $outlineDictionary->C = new InternalType\ArrayObject($colorComponentElements);
         }
 

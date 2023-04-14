@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -69,11 +70,11 @@ abstract class AbstractParsed extends \LaminasPdf\Resource\Font\Simple\AbstractS
         $this->_resource->BaseFont = new InternalType\NameObject($baseFont);
 
         $this->_resource->FirstChar = new InternalType\NumericObject(0);
-        $this->_resource->LastChar = new InternalType\NumericObject(count($this->_glyphWidths) - 1);
+        $this->_resource->LastChar = new InternalType\NumericObject((is_countable($this->_glyphWidths) ? count($this->_glyphWidths) : 0) - 1);
 
         /* Now convert the scalar glyph widths to \LaminasPdf\InternalType\NumericObect objects.
          */
-        $pdfWidths = array();
+        $pdfWidths = [];
         foreach ($this->_glyphWidths as $width) {
             $pdfWidths[] = new InternalType\NumericObject($this->toEmSpace($width));
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -50,7 +51,7 @@ class SegmentToDelta extends AbstractCmap
      * Array of ending character codes for each segment.
      * @var array
      */
-    protected $_segmentTableEndCodes = array();
+    protected $_segmentTableEndCodes = [];
 
     /**
      * The ending character code for the segment at the end of the low search
@@ -63,25 +64,25 @@ class SegmentToDelta extends AbstractCmap
      * Array of starting character codes for each segment.
      * @var array
      */
-    protected $_segmentTableStartCodes = array();
+    protected $_segmentTableStartCodes = [];
 
     /**
      * Array of character code to glyph delta values for each segment.
      * @var array
      */
-    protected $_segmentTableIdDeltas = array();
+    protected $_segmentTableIdDeltas = [];
 
     /**
      * Array of offsets into the glyph index array for each segment.
      * @var array
      */
-    protected $_segmentTableIdRangeOffsets = array();
+    protected $_segmentTableIdRangeOffsets = [];
 
     /**
      * Glyph index array. Stores glyph numbers, used with range offset.
      * @var array
      */
-    protected $_glyphIndexArray = array();
+    protected $_glyphIndexArray = [];
 
 
     /**** Public Interface ****/
@@ -102,9 +103,8 @@ class SegmentToDelta extends AbstractCmap
      */
     public function glyphNumbersForCharacters($characterCodes)
     {
-        $glyphNumbers = array();
+        $glyphNumbers = [];
         foreach ($characterCodes as $key => $characterCode) {
-
             /* These tables only cover the 16-bit character range.
              */
             if ($characterCode > 0xffff) {
@@ -156,7 +156,6 @@ class SegmentToDelta extends AbstractCmap
                  * glyph number.
                  */
                 $glyphNumbers[$key] = ($characterCode + $this->_segmentTableIdDeltas[$subtableIndex]) % 65536;
-
             } else {
                 /* This segment relies on the glyph index array to determine the
                  * glyph number. The calculation below determines the correct
@@ -170,9 +169,7 @@ class SegmentToDelta extends AbstractCmap
                     $this->_segmentTableIdRangeOffsets[$subtableIndex] - $this->_segmentCount +
                     $subtableIndex - 1);
                 $glyphNumbers[$key] = $this->_glyphIndexArray[$glyphIndex];
-
             }
-
         }
         return $glyphNumbers;
     }
@@ -191,6 +188,7 @@ class SegmentToDelta extends AbstractCmap
      */
     public function glyphNumberForCharacter($characterCode)
     {
+        $subtableIndex = null;
         /* This code is pretty much a copy of glyphNumbersForCharacters().
          * See that method for inline documentation.
          */
@@ -237,7 +235,7 @@ class SegmentToDelta extends AbstractCmap
      */
     public function getCoveredCharacters()
     {
-        $characterCodes = array();
+        $characterCodes = [];
         for ($i = 1; $i <= $this->_segmentCount; $i++) {
             for ($code = $this->_segmentTableStartCodes[$i]; $code <= $this->_segmentTableEndCodes[$i]; $code++) {
                 $characterCodes[] = $code;
@@ -260,15 +258,17 @@ class SegmentToDelta extends AbstractCmap
      */
     public function getCoveredCharactersGlyphs()
     {
-        $glyphNumbers = array();
+        $glyphNumbers = [];
 
         for ($segmentNum = 1; $segmentNum <= $this->_segmentCount; $segmentNum++) {
             if ($this->_segmentTableIdRangeOffsets[$segmentNum] == 0) {
                 $delta = $this->_segmentTableIdDeltas[$segmentNum];
 
-                for ($code = $this->_segmentTableStartCodes[$segmentNum];
+                for (
+                    $code = $this->_segmentTableStartCodes[$segmentNum];
                      $code <= $this->_segmentTableEndCodes[$segmentNum];
-                     $code++) {
+                     $code++
+                ) {
                     $glyphNumbers[$code] = ($code + $delta) % 65536;
                 }
             } else {

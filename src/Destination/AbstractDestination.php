@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -38,7 +39,7 @@ abstract class AbstractDestination extends Pdf\InternalStructure\NavigationTarge
         if ($resource->getType() != InternalType\AbstractTypeObject::TYPE_ARRAY) {
             throw new Exception\CorruptedPdfException('An explicit destination must be a direct or an indirect array object.');
         }
-        if (count($resource->items) < 2) {
+        if ((is_countable($resource->items) ? count($resource->items) : 0) < 2) {
             throw new Exception\CorruptedPdfException('An explicit destination array must contain at least two elements.');
         }
 

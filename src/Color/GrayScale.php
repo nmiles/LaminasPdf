@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -66,6 +67,6 @@ class GrayScale implements ColorInterface
      */
     public function getComponents()
     {
-        return array($this->_grayLevel->value);
+        return [$this->_grayLevel->value];
     }
 }

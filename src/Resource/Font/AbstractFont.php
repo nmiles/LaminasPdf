@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -43,7 +44,7 @@ abstract class AbstractFont extends Resource\AbstractResource
      * Array containing descriptive names for the font. See {@link fontName()}.
      * @var array
      */
-    protected $_fontNames = array();
+    protected $_fontNames = [];
 
     /**
      * Flag indicating whether or not this font is bold.

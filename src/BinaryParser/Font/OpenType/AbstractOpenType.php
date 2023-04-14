@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -42,7 +43,7 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
     /**
      * Special exception code. Used during font loading.
      */
-    const REQUIRED_TABLE_NOT_FOUND = 0x0303;
+    public const REQUIRED_TABLE_NOT_FOUND = 0x0303;
 
     /**** Instance Variables ****/
 
@@ -58,7 +59,7 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
      * Stores the byte offsets to the various information tables.
      * @var array
      */
-    protected $_tableDirectory = array();
+    protected $_tableDirectory = [];
 
 
     /**** Public Interface ****/
@@ -241,8 +242,13 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
         $this->yMin = $this->readInt(2);
         $this->xMax = $this->readInt(2);
         $this->yMax = $this->readInt(2);
-        $this->_debugLog('Font bounding box: %d %d %d %d',
-            $this->xMin, $this->yMin, $this->xMax, $this->yMax);
+        $this->_debugLog(
+            'Font bounding box: %d %d %d %d',
+            $this->xMin,
+            $this->yMin,
+            $this->xMax,
+            $this->yMax
+        );
 
         /* The style bits here must match the fsSelection bits in the OS/2
          * table, if present.
@@ -294,15 +300,16 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
          * use Mac Roman if nothing else is available. We will extract the
          * actual strings later.
          */
-        $nameRecords = array();
+        $nameRecords = [];
         for ($nameIndex = 0; $nameIndex < $nameCount; $nameIndex++) {
-
             $platformID = $this->readUInt(2);
             $encodingID = $this->readUInt(2);
 
-            if (!((($platformID == 3) && ($encodingID == 1)) ||    // Microsoft Unicode
+            if (
+                !((($platformID == 3) && ($encodingID == 1)) ||    // Microsoft Unicode
                 (($platformID == 1) && ($encodingID == 0))       // Mac Roman
-            )) {
+                )
+            ) {
                 $this->skipBytes(8);    // Not a supported encoding. Move on.
                 continue;
             }
@@ -318,21 +325,26 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
                 continue;    // Not a supported language. Move on.
             }
 
-            $this->_debugLog('Adding nameID: %d; languageID: 0x%x; platformID: %d; offset: 0x%x (0x%x); length: %d',
-                $nameID, $languageID, $platformID, $baseOffset + $nameOffset, $nameOffset, $nameLength);
+            $this->_debugLog(
+                'Adding nameID: %d; languageID: 0x%x; platformID: %d; offset: 0x%x (0x%x); length: %d',
+                $nameID,
+                $languageID,
+                $platformID,
+                $baseOffset + $nameOffset,
+                $nameOffset,
+                $nameLength
+            );
 
             /* Entries in the name table are sorted by platform ID. If an entry
              * exists for both Mac Roman and Microsoft Unicode, the Unicode entry
              * will prevail since it is processed last.
              */
-            $nameRecords[$nameID][$languageCode] = array('platform' => $platformID,
-                'offset' => $nameOffset,
-                'length' => $nameLength);
+            $nameRecords[$nameID][$languageCode] = ['platform' => $platformID, 'offset' => $nameOffset, 'length' => $nameLength];
         }
 
         /* Now go back and extract the interesting strings.
          */
-        $fontNames = array();
+        $fontNames = [];
         foreach ($nameRecords as $name => $languages) {
             foreach ($languages as $language => $attributes) {
                 $stringOffset = $storageOffset + $attributes['offset'];
@@ -418,8 +430,11 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
          * sign and record a warning in the debug log that we did this.
          */
         if ($this->descent > 0) {
-            $this->_debugLog('Warning: Font should specify negative descent. Actual: %d; Using %d',
-                $this->descent, -$this->descent);
+            $this->_debugLog(
+                'Warning: Font should specify negative descent. Actual: %d; Using %d',
+                $this->descent,
+                -$this->descent
+            );
             $this->descent = -$this->descent;
         }
 
@@ -432,8 +447,11 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
          */
         $this->metricDataFormat = $this->readInt(2);
         $this->numberHMetrics = $this->readUInt(2);
-        $this->_debugLog('hmtx data format: %d; number of metrics: %d',
-            $this->metricDataFormat, $this->numberHMetrics);
+        $this->_debugLog(
+            'hmtx data format: %d; number of metrics: %d',
+            $this->metricDataFormat,
+            $this->numberHMetrics
+        );
     }
 
 
@@ -621,8 +639,13 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
         $unicodeRange2 = $this->readUInt(4);
         $unicodeRange3 = $this->readUInt(4);
         $unicodeRange4 = $this->readUInt(4);
-        $this->_debugLog('Unicode ranges: 0x%x 0x%x 0x%x 0x%x',
-            $unicodeRange1, $unicodeRange2, $unicodeRange3, $unicodeRange4);
+        $this->_debugLog(
+            'Unicode ranges: 0x%x 0x%x 0x%x 0x%x',
+            $unicodeRange1,
+            $unicodeRange2,
+            $unicodeRange3,
+            $unicodeRange4
+        );
 
         /* The Unicode range is currently only used to decide if the character
          * set covered by the font is a subset of the Adobe Latin set, meaning
@@ -661,8 +684,11 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
          * sign and record a warning in the debug log that we did this.
          */
         if ($this->descent > 0) {
-            $this->_debugLog('Warning: Font should specify negative descent. Actual: %d; Using %d',
-                $this->descent, -$this->descent);
+            $this->_debugLog(
+                'Warning: Font should specify negative descent. Actual: %d; Using %d',
+                $this->descent,
+                -$this->descent
+            );
             $this->descent = -$this->descent;
         }
 
@@ -677,7 +703,6 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
             $this->xHeight = 0;
             $this->capitalHeight = 0;
         } else {
-
             /* Skip over the Windows code page coverages. We are only concerned
              * with Unicode coverage.
              */
@@ -723,7 +748,7 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
          * the glyph's advance width and its left side bearing. We don't use the
          * left side bearing.
          */
-        $glyphWidths = array();
+        $glyphWidths = [];
         for ($i = 0; $i < $this->numberHMetrics; $i++) {
             $glyphWidths[$i] = $this->readUInt(2);
             $this->skipBytes(2);
@@ -760,6 +785,8 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
      */
     protected function _parseCMapTable()
     {
+        $cmapOffset = null;
+        $cmapLength = null;
         $this->_jumpToTable('cmap');
         $baseOffset = $this->_tableDirectory['cmap']['offset'];
 
@@ -777,39 +804,51 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
         /* Like the name table, there may be many different encoding subtables
          * present. Ideally, we are looking for an acceptable Unicode table.
          */
-        $subtables = array();
+        $subtables = [];
         for ($subtableIndex = 0; $subtableIndex < $subtableCount; $subtableIndex++) {
-
             $platformID = $this->readUInt(2);
             $encodingID = $this->readUInt(2);
 
-            if (!((($platformID == 0) && ($encodingID == 3)) ||    // Unicode 2.0 or later
+            if (
+                !((($platformID == 0) && ($encodingID == 3)) ||    // Unicode 2.0 or later
                 (($platformID == 0) && ($encodingID == 0)) ||    // Unicode
                 (($platformID == 3) && ($encodingID == 1)) ||    // Microsoft Unicode
                 (($platformID == 1) && ($encodingID == 0))       // Mac Roman
-            )) {
-                $this->_debugLog('Unsupported encoding: platformID: %d; encodingID: %d; skipping',
-                    $platformID, $encodingID);
+                )
+            ) {
+                $this->_debugLog(
+                    'Unsupported encoding: platformID: %d; encodingID: %d; skipping',
+                    $platformID,
+                    $encodingID
+                );
                 $this->skipBytes(4);
                 continue;
             }
 
             $subtableOffset = $this->readUInt(4);
             if ($subtableOffset < 0) {    // Sanity check for 4-byte unsigned on 32-bit platform
-                $this->_debugLog('Offset 0x%x out of range for platformID: %d; skipping',
-                    $subtableOffset, $platformID);
+                $this->_debugLog(
+                    'Offset 0x%x out of range for platformID: %d; skipping',
+                    $subtableOffset,
+                    $platformID
+                );
                 continue;
             }
 
-            $this->_debugLog('Found subtable; platformID: %d; encodingID: %d; offset: 0x%x (0x%x)',
-                $platformID, $encodingID, $baseOffset + $subtableOffset, $subtableOffset);
+            $this->_debugLog(
+                'Found subtable; platformID: %d; encodingID: %d; offset: 0x%x (0x%x)',
+                $platformID,
+                $encodingID,
+                $baseOffset + $subtableOffset,
+                $subtableOffset
+            );
 
             $subtables[$platformID][$encodingID][] = $subtableOffset;
         }
 
         /* In preferred order, find a subtable to use.
          */
-        $offsets = array();
+        $offsets = [];
 
         /* Unicode 2.0 or later semantics
          */
@@ -899,8 +938,12 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
 
         /* Now extract the subtable data and create a \LaminasPdf\Cmap\AbstractCmap object.
          */
-        $this->_debugLog('Using cmap type %d; offset: 0x%x; length: %d',
-            $cmapType, $cmapOffset, $cmapLength);
+        $this->_debugLog(
+            'Using cmap type %d; offset: 0x%x; length: %d',
+            $cmapType,
+            $cmapOffset,
+            $cmapLength
+        );
         $this->moveToOffset($cmapOffset);
         $cmapData = $this->readBytes($cmapLength);
 
@@ -961,8 +1004,10 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
     protected function _jumpToTable($tableName)
     {
         if (empty($this->_tableDirectory[$tableName])) {    // do not allow NULL or zero
-            throw new Exception\CorruptedFontException("Required table '$tableName' not found!",
-                self::REQUIRED_TABLE_NOT_FOUND);
+            throw new Exception\CorruptedFontException(
+                "Required table '$tableName' not found!",
+                self::REQUIRED_TABLE_NOT_FOUND
+            );
         }
         $this->_debugLog("Parsing $tableName table...");
         $this->moveToOffset($this->_tableDirectory[$tableName]['offset']);
@@ -1041,7 +1086,6 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
                 default:
                     return null;
             }
-
         } elseif ($platformID == 1) {    // Macintosh encoding.
             switch ($languageID) {
                 case 0:
@@ -1078,10 +1122,8 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
                 default:
                     return null;
             }
-
         } else {    // Unknown encoding.
             return null;
         }
     }
-
 }

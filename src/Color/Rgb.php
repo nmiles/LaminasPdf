@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -103,6 +104,6 @@ class Rgb implements ColorInterface
      */
     public function getComponents()
     {
-        return array($this->_r->value, $this->_g->value, $this->_b->value);
+        return [$this->_r->value, $this->_g->value, $this->_b->value];
     }
 }

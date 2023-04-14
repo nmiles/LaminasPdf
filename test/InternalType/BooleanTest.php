@@ -36,7 +36,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFBooleanBadArgument()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be boolean');
         $boolObj = new InternalType\BooleanObject('some input');
     }

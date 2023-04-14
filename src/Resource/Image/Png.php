@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -22,25 +23,25 @@ use LaminasPdf\ObjectFactory;
  */
 class Png extends AbstractImage
 {
-    const PNG_COMPRESSION_DEFAULT_STRATEGY = 0;
-    const PNG_COMPRESSION_FILTERED = 1;
-    const PNG_COMPRESSION_HUFFMAN_ONLY = 2;
-    const PNG_COMPRESSION_RLE = 3;
+    public const PNG_COMPRESSION_DEFAULT_STRATEGY = 0;
+    public const PNG_COMPRESSION_FILTERED = 1;
+    public const PNG_COMPRESSION_HUFFMAN_ONLY = 2;
+    public const PNG_COMPRESSION_RLE = 3;
 
-    const PNG_FILTER_NONE = 0;
-    const PNG_FILTER_SUB = 1;
-    const PNG_FILTER_UP = 2;
-    const PNG_FILTER_AVERAGE = 3;
-    const PNG_FILTER_PAETH = 4;
+    public const PNG_FILTER_NONE = 0;
+    public const PNG_FILTER_SUB = 1;
+    public const PNG_FILTER_UP = 2;
+    public const PNG_FILTER_AVERAGE = 3;
+    public const PNG_FILTER_PAETH = 4;
 
-    const PNG_INTERLACING_DISABLED = 0;
-    const PNG_INTERLACING_ENABLED = 1;
+    public const PNG_INTERLACING_DISABLED = 0;
+    public const PNG_INTERLACING_ENABLED = 1;
 
-    const PNG_CHANNEL_GRAY = 0;
-    const PNG_CHANNEL_RGB = 2;
-    const PNG_CHANNEL_INDEXED = 3;
-    const PNG_CHANNEL_GRAY_ALPHA = 4;
-    const PNG_CHANNEL_RGB_ALPHA = 6;
+    public const PNG_CHANNEL_GRAY = 0;
+    public const PNG_CHANNEL_RGB = 2;
+    public const PNG_CHANNEL_INDEXED = 3;
+    public const PNG_CHANNEL_GRAY_ALPHA = 4;
+    public const PNG_CHANNEL_RGB_ALPHA = 6;
 
     protected $_width;
     protected $_height;
@@ -88,7 +89,7 @@ class Png extends AbstractImage
 
         $this->_width = $width;
         $this->_height = $height;
-        $this->_imageProperties = array();
+        $this->_imageProperties = [];
         $this->_imageProperties['bitDepth'] = $bits;
         $this->_imageProperties['pngColorType'] = $color;
         $this->_imageProperties['pngFilterType'] = $prefilter;
@@ -128,27 +129,20 @@ class Png extends AbstractImage
                     switch ($color) {
                         case self::PNG_CHANNEL_GRAY:
                             $baseColor = ord(substr($trnsData, 1, 1));
-                            $transparencyData = array(new InternalType\NumericObject($baseColor),
-                                new InternalType\NumericObject($baseColor));
+                            $transparencyData = [new InternalType\NumericObject($baseColor), new InternalType\NumericObject($baseColor)];
                             break;
 
                         case self::PNG_CHANNEL_RGB:
                             $red = ord(substr($trnsData, 1, 1));
                             $green = ord(substr($trnsData, 3, 1));
                             $blue = ord(substr($trnsData, 5, 1));
-                            $transparencyData = array(new InternalType\NumericObject($red),
-                                new InternalType\NumericObject($red),
-                                new InternalType\NumericObject($green),
-                                new InternalType\NumericObject($green),
-                                new InternalType\NumericObject($blue),
-                                new InternalType\NumericObject($blue));
+                            $transparencyData = [new InternalType\NumericObject($red), new InternalType\NumericObject($red), new InternalType\NumericObject($green), new InternalType\NumericObject($green), new InternalType\NumericObject($blue), new InternalType\NumericObject($blue)];
                             break;
 
                         case self::PNG_CHANNEL_INDEXED:
                             //Find the first transparent color in the index, we will mask that. (This is a bit of a hack. This should be a SMask and mask all entries values).
                             if (($trnsIdx = strpos($trnsData, "\0")) !== false) {
-                                $transparencyData = array(new InternalType\NumericObject($trnsIdx),
-                                    new InternalType\NumericObject($trnsIdx));
+                                $transparencyData = [new InternalType\NumericObject($trnsIdx), new InternalType\NumericObject($trnsIdx)];
                             }
                             break;
 
@@ -286,7 +280,7 @@ class Png extends AbstractImage
             $imageDictionary->SMask = $smaskStream;
 
             // Encode stream with FlateDecode filter
-            $smaskStreamDecodeParms = array();
+            $smaskStreamDecodeParms = [];
             $smaskStreamDecodeParms['Predictor'] = new InternalType\NumericObject(15);
             $smaskStreamDecodeParms['Columns'] = new InternalType\NumericObject($width);
             $smaskStreamDecodeParms['Colors'] = new InternalType\NumericObject(1);
@@ -306,7 +300,7 @@ class Png extends AbstractImage
         $imageDictionary->BitsPerComponent = new InternalType\NumericObject($bits);
         $imageDictionary->Filter = new InternalType\NameObject('FlateDecode');
 
-        $decodeParms = array();
+        $decodeParms = [];
         $decodeParms['Predictor'] = new InternalType\NumericObject(15); // Optimal prediction
         $decodeParms['Columns'] = new InternalType\NumericObject($width);
         $decodeParms['Colors'] = new InternalType\NumericObject((($color == self::PNG_CHANNEL_RGB || $color == self::PNG_CHANNEL_RGB_ALPHA) ? (3) : (1)));

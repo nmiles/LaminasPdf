@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -82,20 +83,22 @@ class StreamObject extends IndirectObject
      */
     private function _extractDictionaryData()
     {
-        $dictionaryArray = array();
+        $dictionaryArray = [];
 
-        $dictionaryArray['Filter'] = array();
-        $dictionaryArray['DecodeParms'] = array();
+        $dictionaryArray['Filter'] = [];
+        $dictionaryArray['DecodeParms'] = [];
         if ($this->_dictionary->Filter === null) {
             // Do nothing.
         } elseif ($this->_dictionary->Filter->getType() == AbstractTypeObject::TYPE_ARRAY) {
             foreach ($this->_dictionary->Filter->items as $id => $filter) {
                 $dictionaryArray['Filter'][$id] = $filter->value;
-                $dictionaryArray['DecodeParms'][$id] = array();
+                $dictionaryArray['DecodeParms'][$id] = [];
 
                 if ($this->_dictionary->DecodeParms !== null) {
-                    if ($this->_dictionary->DecodeParms->items[$id] !== null &&
-                        $this->_dictionary->DecodeParms->items[$id]->value !== null) {
+                    if (
+                        $this->_dictionary->DecodeParms->items[$id] !== null &&
+                        $this->_dictionary->DecodeParms->items[$id]->value !== null
+                    ) {
                         foreach ($this->_dictionary->DecodeParms->items[$id]->getKeys() as $paramKey) {
                             $dictionaryArray['DecodeParms'][$id][$paramKey] =
                                 $this->_dictionary->DecodeParms->items[$id]->$paramKey->value;
@@ -105,7 +108,7 @@ class StreamObject extends IndirectObject
             }
         } elseif ($this->_dictionary->Filter->getType() != AbstractTypeObject::TYPE_NULL) {
             $dictionaryArray['Filter'][0] = $this->_dictionary->Filter->value;
-            $dictionaryArray['DecodeParms'][0] = array();
+            $dictionaryArray['DecodeParms'][0] = [];
             if ($this->_dictionary->DecodeParms !== null) {
                 foreach ($this->_dictionary->DecodeParms->getKeys() as $paramKey) {
                     $dictionaryArray['DecodeParms'][0][$paramKey] =
@@ -118,18 +121,20 @@ class StreamObject extends IndirectObject
             $dictionaryArray['F'] = $this->_dictionary->F->value;
         }
 
-        $dictionaryArray['FFilter'] = array();
-        $dictionaryArray['FDecodeParms'] = array();
+        $dictionaryArray['FFilter'] = [];
+        $dictionaryArray['FDecodeParms'] = [];
         if ($this->_dictionary->FFilter === null) {
             // Do nothing.
         } elseif ($this->_dictionary->FFilter->getType() == AbstractTypeObject::TYPE_ARRAY) {
             foreach ($this->_dictionary->FFilter->items as $id => $filter) {
                 $dictionaryArray['FFilter'][$id] = $filter->value;
-                $dictionaryArray['FDecodeParms'][$id] = array();
+                $dictionaryArray['FDecodeParms'][$id] = [];
 
                 if ($this->_dictionary->FDecodeParms !== null) {
-                    if ($this->_dictionary->FDecodeParms->items[$id] !== null &&
-                        $this->_dictionary->FDecodeParms->items[$id]->value !== null) {
+                    if (
+                        $this->_dictionary->FDecodeParms->items[$id] !== null &&
+                        $this->_dictionary->FDecodeParms->items[$id]->value !== null
+                    ) {
                         foreach ($this->_dictionary->FDecodeParms->items[$id]->getKeys() as $paramKey) {
                             $dictionaryArray['FDecodeParms'][$id][$paramKey] =
                                 $this->_dictionary->FDecodeParms->items[$id]->items[$paramKey]->value;
@@ -139,7 +144,7 @@ class StreamObject extends IndirectObject
             }
         } else {
             $dictionaryArray['FFilter'][0] = $this->_dictionary->FFilter->value;
-            $dictionaryArray['FDecodeParms'][0] = array();
+            $dictionaryArray['FDecodeParms'][0] = [];
             if ($this->_dictionary->FDecodeParms !== null) {
                 foreach ($this->_dictionary->FDecodeParms->getKeys() as $paramKey) {
                     $dictionaryArray['FDecodeParms'][0][$paramKey] =
@@ -184,13 +189,17 @@ class StreamObject extends IndirectObject
                     break;
 
                 case 'FlateDecode':
-                    $valueRef = CompressionFilter\Flate::decode($valueRef,
-                        $this->_initialDictionaryData['DecodeParms'][$id]);
+                    $valueRef = CompressionFilter\Flate::decode(
+                        $valueRef,
+                        $this->_initialDictionaryData['DecodeParms'][$id]
+                    );
                     break;
 
                 case 'LZWDecode':
-                    $valueRef = CompressionFilter\Lzw::decode($valueRef,
-                        $this->_initialDictionaryData['DecodeParms'][$id]);
+                    $valueRef = CompressionFilter\Lzw::decode(
+                        $valueRef,
+                        $this->_initialDictionaryData['DecodeParms'][$id]
+                    );
                     break;
 
                 case 'RunLengthDecode':
@@ -236,13 +245,17 @@ class StreamObject extends IndirectObject
                     break;
 
                 case 'FlateDecode':
-                    $valueRef = CompressionFilter\Flate::encode($valueRef,
-                        $this->_initialDictionaryData['DecodeParms'][$id]);
+                    $valueRef = CompressionFilter\Flate::encode(
+                        $valueRef,
+                        $this->_initialDictionaryData['DecodeParms'][$id]
+                    );
                     break;
 
                 case 'LZWDecode':
-                    $valueRef = CompressionFilter\Lzw::encode($valueRef,
-                        $this->_initialDictionaryData['DecodeParms'][$id]);
+                    $valueRef = CompressionFilter\Lzw::encode(
+                        $valueRef,
+                        $this->_initialDictionaryData['DecodeParms'][$id]
+                    );
                     break;
 
                 case 'RunLengthDecode':
@@ -333,7 +346,7 @@ class StreamObject extends IndirectObject
             $this->_decodeStream();
         }
 
-        call_user_func_array(array($this->_value, $method), $args);
+        call_user_func_array([$this->_value, $method], $args);
     }
 
     /**

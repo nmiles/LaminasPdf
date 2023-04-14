@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -43,6 +44,7 @@ class AsciiHex implements StreamFilterInterface
      */
     public static function decode($data, $params = null)
     {
+        $hexCodeHigh = null;
         $output = '';
         $oddCode = true;
         $commentMode = false;

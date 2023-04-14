@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -44,7 +45,6 @@ class Uri extends AbstractAction
      * Validate URI
      *
      * @param string $uri
-     * @return true
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
     protected static function _validateUri($uri)
@@ -86,7 +86,7 @@ class Uri extends AbstractAction
      */
     public function setUri($uri)
     {
-        $this->_validateUri($uri);
+        static::_validateUri($uri);
 
         $this->_actionDictionary->touch();
         $this->_actionDictionary->URI = new InternalType\StringObject($uri);

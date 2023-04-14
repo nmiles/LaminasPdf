@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -116,12 +117,11 @@ class Type0 extends AbstractFont
 
         $this->_resource->Subtype = new InternalType\NameObject('Type0');
         $this->_resource->BaseFont = new InternalType\NameObject($descendantFont->getResource()->BaseFont->value);
-        $this->_resource->DescendantFonts = new InternalType\ArrayObject(array($descendantFont->getResource()));
+        $this->_resource->DescendantFonts = new InternalType\ArrayObject([$descendantFont->getResource()]);
         $this->_resource->Encoding = new InternalType\NameObject('Identity-H');
 
         $toUnicode = $this->_objectFactory->newStreamObject(self::getToUnicodeCMapData());
         $this->_resource->ToUnicode = $toUnicode;
-
     }
 
     /**

@@ -36,7 +36,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFObjectBadObjectType1()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must not be an instance of \LaminasPdf\InternalType\IndirectObject');
 
         $intObj = new InternalType\NumericObject(100);
@@ -46,7 +46,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFObjectBadGenNumber1()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be non-negative integer');
 
         $intObj = new InternalType\NumericObject(100);
@@ -55,7 +55,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFObjectBadGenNumber2()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be non-negative integer');
 
         $intObj = new InternalType\NumericObject(100);
@@ -64,7 +64,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFObjectBadObjectNumber1()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be positive integer');
 
         $intObj = new InternalType\NumericObject(100);
@@ -73,7 +73,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFObjectBadObjectNumber2()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be positive integer');
 
         $intObj = new InternalType\NumericObject(100);
@@ -82,7 +82,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFObjectBadObjectNumber3()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be positive integer');
 
         $intObj = new InternalType\NumericObject(100);

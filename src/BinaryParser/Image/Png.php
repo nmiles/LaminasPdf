@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -251,11 +252,10 @@ class Png extends AbstractImage
         switch ($this->_color) {
             case Pdf\Image::PNG_CHANNEL_GRAY:
                 $baseColor = $this->readInt(1);
-                $this->_transparencyData = array($baseColor, $baseColor);
+                $this->_transparencyData = [$baseColor, $baseColor];
                 break;
 
             case Pdf\Image::PNG_CHANNEL_RGB:
-
                 //@TODO Fix this hack.
                 //This parser cheats and only uses the lsb's (and only works with < 16 bit depth images)
 
@@ -280,12 +280,11 @@ class Png extends AbstractImage
                 $this->skipBytes(1);
                 $blue = $this->readInt(1);
 
-                $this->_transparencyData = array($red, $red, $green, $green, $blue, $blue);
+                $this->_transparencyData = [$red, $red, $green, $green, $blue, $blue];
 
                 break;
 
             case Pdf\Image::PNG_CHANNEL_INDEXED:
-
                 //@TODO Fix this hack.
                 //This parser cheats too. It only masks the first color in the palette.
 
@@ -309,7 +308,7 @@ class Png extends AbstractImage
 
                 $tmpData = $this->readBytes($chunkLength);
                 if (($trnsIdx = strpos($tmpData, "\0")) !== false) {
-                    $this->_transparencyData = array($trnsIdx, $trnsIdx);
+                    $this->_transparencyData = [$trnsIdx, $trnsIdx];
                 }
 
                 break;

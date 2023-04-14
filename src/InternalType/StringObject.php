@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -70,7 +71,7 @@ class StringObject extends AbstractTypeObject
      */
     public static function escape($str)
     {
-        $outEntries = array();
+        $outEntries = [];
 
         foreach (str_split($str, 128) as $chunk) {
             // Collect sequence of unescaped characters
@@ -155,7 +156,7 @@ class StringObject extends AbstractTypeObject
      */
     public static function unescape($str)
     {
-        $outEntries = array();
+        $outEntries = [];
 
         $offset = 0;
         while ($offset < strlen($str)) {
@@ -247,5 +248,4 @@ class StringObject extends AbstractTypeObject
 
         return implode($outEntries);
     }
-
 }

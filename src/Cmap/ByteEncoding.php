@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -35,7 +36,7 @@ class ByteEncoding extends AbstractCmap
      * the translated Unicode code points.
      * @var array
      */
-    protected $_glyphIndexArray = array();
+    protected $_glyphIndexArray = [];
 
 
     /**** Public Interface ****/
@@ -56,16 +57,14 @@ class ByteEncoding extends AbstractCmap
      */
     public function glyphNumbersForCharacters($characterCodes)
     {
-        $glyphNumbers = array();
+        $glyphNumbers = [];
         foreach ($characterCodes as $key => $characterCode) {
-
             if (!isset($this->_glyphIndexArray[$characterCode])) {
                 $glyphNumbers[$key] = AbstractCmap::MISSING_CHARACTER_GLYPH;
                 continue;
             }
 
             $glyphNumbers[$key] = $this->_glyphIndexArray[$characterCode];
-
         }
         return $glyphNumbers;
     }

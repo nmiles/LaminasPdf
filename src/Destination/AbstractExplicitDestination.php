@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -49,7 +50,7 @@ abstract class AbstractExplicitDestination extends AbstractDestination
 
         $this->_destinationArray = $destinationArray;
 
-        switch (count($this->_destinationArray->items)) {
+        switch (is_countable($this->_destinationArray->items) ? count($this->_destinationArray->items) : 0) {
             case 0:
                 throw new Exception\CorruptedPdfException('Destination array must contain a page reference.');
                 break;

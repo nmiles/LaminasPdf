@@ -37,7 +37,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     private $_originaltimezone;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_originaltimezone = date_default_timezone_get();
         date_default_timezone_set('GMT');
@@ -46,7 +46,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     /**
      * Teardown environment
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         date_default_timezone_set($this->_originaltimezone);
     }
@@ -163,7 +163,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $action = Action\AbstractAction::load($dictionary);
 
         $actionsCount = 0;
-        $iterator = new \RecursiveIteratorIterator(new Util\RecursivelyIteratableObjectsContainer(array($action)),
+        $iterator = new \RecursiveIteratorIterator(new Util\RecursivelyIteratableObjectsContainer([$action]),
             \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $chainedAction) {
             $actionsCount++;
@@ -283,8 +283,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
         $action = Action\AbstractAction::load($dictionary);
 
-        $actionsToClean = array();
-        $deletionCandidateKeys = array();
+        $actionsToClean = [];
+        $deletionCandidateKeys = [];
         $iterator = new \RecursiveIteratorIterator($action, \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $chainedAction) {
             if ($chainedAction instanceof Action\GoToAction) {
@@ -296,7 +296,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             unset($action->next[$deletionCandidateKeys[$id]]);
         }
         $actionsCount = 0;
-        $iterator = new \RecursiveIteratorIterator(new Util\RecursivelyIteratableObjectsContainer(array($action)),
+        $iterator = new \RecursiveIteratorIterator(new Util\RecursivelyIteratableObjectsContainer([$action]),
             \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $chainedAction) {
             $actionsCount++;
@@ -387,7 +387,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $dictionary->S = new InternalType\NameObject('URI');
 
 
-        $this->expectException('\LaminasPdf\Exception\CorruptedPdfException');
+        $this->expectException('\\' . \LaminasPdf\Exception\CorruptedPdfException::class);
         $this->expectExceptionMessage('URI action dictionary entry is required');
         $action = Action\AbstractAction::load($dictionary);
 
@@ -430,7 +430,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testPhpVersionBug()
     {
-        $this->expectException('\LaminasPdf\Exception\NotImplementedException');
+        $this->expectException('\\' . \LaminasPdf\Exception\NotImplementedException::class);
         $this->expectExceptionMessage('Cross-reference streams are not supported yet');
 
         $pdf = Pdf\PdfDocument::load(__DIR__ . '/_files/ZF-8462.pdf');

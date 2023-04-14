@@ -31,7 +31,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
      */
     private $_originaltimezone;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_originaltimezone = date_default_timezone_get();
         date_default_timezone_set('GMT');
@@ -40,7 +40,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
     /**
      * Teardown environment
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         date_default_timezone_set($this->_originaltimezone);
     }
@@ -74,7 +74,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
         // Draw rectangle
         $page2->setFillColor(new Color\GrayScale(0.8))
             ->setLineColor(new Color\GrayScale(0.2))
-            ->setLineDashingPattern(array(3, 2, 3, 4), 1.6)
+            ->setLineDashingPattern([3, 2, 3, 4], 1.6)
             ->drawRectangle(60, 400, 500, 350);
 
         // Draw rounded rectangle
@@ -105,8 +105,8 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
 
         // Draw and fill polygon
         $page2->setFillColor(new Color\Rgb(1, 0, 1));
-        $x = array();
-        $y = array();
+        $x = [];
+        $y = [];
         for ($count = 0; $count < 8; $count++) {
             $x[] = 140 + 25 * cos(3 * M_PI_4 * $count);
             $y[] = 375 + 25 * sin(3 * M_PI_4 * $count);
@@ -145,7 +145,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
             $page->setFillColor(new Color\Rgb(0, 0, 0.9))
                 ->setLineColor(new Color\GrayScale(0.2))
                 ->setLineWidth(3)
-                ->setLineDashingPattern(array(3, 2, 3, 4), 1.6)
+                ->setLineDashingPattern([3, 2, 3, 4], 1.6)
                 ->setFont(Pdf\Font::fontWithName(Pdf\Font::FONT_HELVETICA_BOLD), 32);
 
 
@@ -180,7 +180,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
         // Draw rectangle
         $page2->setFillColor(new Color\GrayScale(0.8))
             ->setLineColor(new Color\GrayScale(0.2))
-            ->setLineDashingPattern(array(3, 2, 3, 4), 1.6)
+            ->setLineDashingPattern([3, 2, 3, 4], 1.6)
             ->drawRectangle(60, 400, 500, 350);
 
         // Draw rounded rectangle
@@ -211,8 +211,8 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
 
         // Draw and fill polygon
         $page2->setFillColor(new Color\Rgb(1, 0, 1));
-        $x = array();
-        $y = array();
+        $x = [];
+        $y = [];
         for ($count = 0; $count < 8; $count++) {
             $x[] = 140 + 25 * cos(3 * M_PI_4 * $count);
             $y[] = 375 + 25 * sin(3 * M_PI_4 * $count);
@@ -294,7 +294,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
 
         $srcPageCount = count($pdf->pages);
 
-        $outputPageSet = array();
+        $outputPageSet = [];
         foreach ($pdf->pages as $srcPage) {
             $page = new Pdf\Page($srcPage);
 
@@ -307,7 +307,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
             $page->setFillColor(new Color\Rgb(0, 0, 0.9))
                 ->setLineColor(new Color\GrayScale(0.2))
                 ->setLineWidth(3)
-                ->setLineDashingPattern(array(3, 2, 3, 4), 1.6)
+                ->setLineDashingPattern([3, 2, 3, 4], 1.6)
                 ->setFont(Pdf\Font::fontWithName(Pdf\Font::FONT_HELVETICA_BOLD), 32);
 
 
@@ -340,7 +340,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
 
         $srcPageCount = count($pdf->pages);
 
-        $outputPageSet = array();
+        $outputPageSet = [];
         foreach ($pdf->pages as $srcPage) {
             $page = clone $srcPage;
 
@@ -350,7 +350,7 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
             $page->setFillColor(new Color\Rgb(0, 0, 0.9))
                 ->setLineColor(new Color\GrayScale(0.2))
                 ->setLineWidth(3)
-                ->setLineDashingPattern(array(3, 2, 3, 4), 1.6)
+                ->setLineDashingPattern([3, 2, 3, 4], 1.6)
                 ->setFont(Pdf\Font::fontWithName(Pdf\Font::FONT_HELVETICA_BOLD), 32);
 
 
@@ -383,8 +383,8 @@ class ProcessingTest extends \PHPUnit\Framework\TestCase
         $pdf = new ExtendedLaminasPDF();
 
         // Test accessing protected variables and their default content
-        $this->assertEquals(array(), $pdf->_originalProperties);
-        $this->assertEquals(array(), $pdf->_namedTargets);
+        $this->assertEquals([], $pdf->_originalProperties);
+        $this->assertEquals([], $pdf->_namedTargets);
 
         $pdfpage = new ExtendedLaminasPDFPage(Pdf\Page::SIZE_A4);
         // Test accessing protected variables and their default content

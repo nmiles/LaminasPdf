@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -49,7 +50,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      *
      * @var array  Array of \LaminasPdf\Action\AbstractAction objects
      */
-    public $next = array();
+    public $next = [];
 
     /**
      * Object constructor
@@ -239,7 +240,6 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
                 default:
                     $pdfChildArray = new InternalType\ArrayObject();
                     foreach ($this->next as $child) {
-
                         $pdfChildArray->items[] = $child->dumpAction($factory, $processedActions);
                     }
                     $this->_actionDictionary->Next = $pdfChildArray;
@@ -343,6 +343,6 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      */
     public function count()
     {
-        return count($this->childOutlines);
+        return is_countable($this->childOutlines) ? count($this->childOutlines) : 0;
     }
 }

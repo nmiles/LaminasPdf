@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -58,10 +59,11 @@ class FontDescriptor
      * @return \LaminasPdf\InternalType\DictionaryObject
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
-    public static function factory(AbstractFont $font,
-                                   OpenTypeFontParser\AbstractOpenType $fontParser,
-                                   $embeddingOptions)
-    {
+    public static function factory(
+        AbstractFont $font,
+        OpenTypeFontParser\AbstractOpenType $fontParser,
+        $embeddingOptions
+    ) {
         /* The font descriptor object contains the rest of the font metrics and
          * the information about the embedded font program (if applicible).
          */
@@ -96,10 +98,7 @@ class FontDescriptor
         // bits 17-19: AllCap, SmallCap, ForceBold; not available
         $fontDescriptor->Flags = new InternalType\NumericObject($flags);
 
-        $fontBBox = array(new InternalType\NumericObject($font->toEmSpace($fontParser->xMin)),
-            new InternalType\NumericObject($font->toEmSpace($fontParser->yMin)),
-            new InternalType\NumericObject($font->toEmSpace($fontParser->xMax)),
-            new InternalType\NumericObject($font->toEmSpace($fontParser->yMax)));
+        $fontBBox = [new InternalType\NumericObject($font->toEmSpace($fontParser->xMin)), new InternalType\NumericObject($font->toEmSpace($fontParser->yMin)), new InternalType\NumericObject($font->toEmSpace($fontParser->xMax)), new InternalType\NumericObject($font->toEmSpace($fontParser->yMax))];
         $fontDescriptor->FontBBox = new InternalType\ArrayObject($fontBBox);
 
         $fontDescriptor->ItalicAngle = new InternalType\NumericObject($fontParser->italicAngle);
@@ -131,7 +130,6 @@ class FontDescriptor
          * First, the developer might specifically request not to embed the font.
          */
         if (!($embeddingOptions & Pdf\Font::EMBED_DONT_EMBED)) {
-
             /* Second, the font author may have set copyright bits that prohibit
              * the font program from being embedded. Yes this is controversial,
              * but it's the rules:
@@ -151,7 +149,6 @@ class FontDescriptor
                         . 'in the $options parameter of the font constructor.';
                     throw new Exception\DomainException($message);
                 }
-
             } else {
                 /* Otherwise, the default behavior is to embed all custom fonts.
                  */

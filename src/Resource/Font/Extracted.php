@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -27,9 +28,9 @@ class Extracted extends AbstractFont
     /**
      * Messages
      */
-    const TYPE_NOT_SUPPORTED = 'Unsupported font type.';
-    const ENCODING_NOT_SUPPORTED = 'Font encoding is not supported';
-    const OPERATION_NOT_SUPPORTED = 'Operation is not supported for extracted fonts';
+    public const TYPE_NOT_SUPPORTED = 'Unsupported font type.';
+    public const ENCODING_NOT_SUPPORTED = 'Font encoding is not supported';
+    public const OPERATION_NOT_SUPPORTED = 'Operation is not supported for extracted fonts';
 
     /**
      * Extracted font encoding
@@ -62,7 +63,7 @@ class Extracted extends AbstractFont
         switch ($fontDictionary->Subtype->value) {
             case 'Type0':
                 // Composite type 0 font
-                if (count($fontDictionary->DescendantFonts->items) != 1) {
+                if ((is_countable($fontDictionary->DescendantFonts->items) ? count($fontDictionary->DescendantFonts->items) : 0) != 1) {
                     // Multiple descendant fonts are not supported
                     throw new Exception\NotImplementedException(self::TYPE_NOT_SUPPORTED);
                 }

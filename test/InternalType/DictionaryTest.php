@@ -36,7 +36,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFDictionary2()
     {
-        $srcArray = array();
+        $srcArray = [];
         $srcArray['Bool'] = new InternalType\BooleanObject(false);
         $srcArray['Number'] = new InternalType\NumericObject(100.426);
         $srcArray['Name'] = new InternalType\NameObject('MyName');
@@ -49,17 +49,17 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFDictionaryBadInput1()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be an array');
         $dictionaryObj = new InternalType\DictionaryObject(346);
     }
 
     public function testPDFDictionaryBadInput2()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('must be \LaminasPdf\InternalType\AbstractTypeObject');
 
-        $srcArray = array();
+        $srcArray = [];
         $srcArray['Bool'] = new InternalType\BooleanObject(false);
         $srcArray['Number'] = new InternalType\NumericObject(100.426);
         $srcArray['Name'] = new InternalType\NameObject('MyName');
@@ -71,9 +71,9 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
 
     public function testPDFDictionaryBadInput3()
     {
-        $this->expectException('\LaminasPdf\Exception\RuntimeException');
+        $this->expectException('\\' . \LaminasPdf\Exception\RuntimeException::class);
         $this->expectExceptionMessage('keys must be strings');
-        $srcArray = array();
+        $srcArray = [];
         $srcArray['Bool'] = new InternalType\BooleanObject(false);
         $srcArray['Number'] = new InternalType\NumericObject(100.426);
         $srcArray['Name'] = new InternalType\NameObject('MyName');
@@ -91,7 +91,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
 
     public function testToString()
     {
-        $srcArray = array();
+        $srcArray = [];
         $srcArray['Bool'] = new InternalType\BooleanObject(false);
         $srcArray['Number'] = new InternalType\NumericObject(100.426);
         $srcArray['Name'] = new InternalType\NameObject('MyName');

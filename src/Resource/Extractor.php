@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -48,7 +49,7 @@ class Extractor
     public function __construct()
     {
         $this->_factory = Pdf\ObjectFactory::createFactory(1);
-        $this->_processed = array();
+        $this->_processed = [];
     }
 
     /**

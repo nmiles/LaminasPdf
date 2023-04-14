@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -156,7 +157,7 @@ class ArrayObject extends AbstractTypeObject
      */
     public function toPhp()
     {
-        $phpArray = array();
+        $phpArray = [];
 
         foreach ($this->items as $item) {
             $phpArray[] = $item->toPhp();

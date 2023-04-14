@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -44,9 +45,11 @@ abstract class NavigationTarget
             }
         }
 
-        if ($resource->getType() == InternalType\AbstractTypeObject::TYPE_ARRAY ||
+        if (
+            $resource->getType() == InternalType\AbstractTypeObject::TYPE_ARRAY ||
             $resource->getType() == InternalType\AbstractTypeObject::TYPE_NAME ||
-            $resource->getType() == InternalType\AbstractTypeObject::TYPE_STRING) {
+            $resource->getType() == InternalType\AbstractTypeObject::TYPE_STRING
+        ) {
             // Resource is an array, just treat it as an explicit destination array
             return Destination\AbstractDestination::load($resource);
         } else {

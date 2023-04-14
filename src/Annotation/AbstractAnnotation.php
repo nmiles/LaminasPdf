@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -194,8 +195,10 @@ abstract class AbstractAnnotation
 
         $this->_annotationDictionary = $annotationDictionary;
 
-        if ($this->_annotationDictionary->Type !== null &&
-            $this->_annotationDictionary->Type->value != 'Annot') {
+        if (
+            $this->_annotationDictionary->Type !== null &&
+            $this->_annotationDictionary->Type->value != 'Annot'
+        ) {
             throw new Exception\CorruptedPdfException('Wrong resource type. \'Annot\' expected.');
         }
 
@@ -203,11 +206,13 @@ abstract class AbstractAnnotation
             throw new Exception\CorruptedPdfException('\'Rect\' dictionary entry is required.');
         }
 
-        if (count($this->_annotationDictionary->Rect->items) != 4 ||
+        if (
+            (is_countable($this->_annotationDictionary->Rect->items) ? count($this->_annotationDictionary->Rect->items) : 0) != 4 ||
             $this->_annotationDictionary->Rect->items[0]->getType() != AbstractTypeObject::TYPE_NUMERIC ||
             $this->_annotationDictionary->Rect->items[1]->getType() != AbstractTypeObject::TYPE_NUMERIC ||
             $this->_annotationDictionary->Rect->items[2]->getType() != AbstractTypeObject::TYPE_NUMERIC ||
-            $this->_annotationDictionary->Rect->items[3]->getType() != AbstractTypeObject::TYPE_NUMERIC) {
+            $this->_annotationDictionary->Rect->items[3]->getType() != AbstractTypeObject::TYPE_NUMERIC
+        ) {
             throw new Exception\CorruptedPdfException('\'Rect\' dictionary entry must be an array of four numeric elements.');
         }
     }

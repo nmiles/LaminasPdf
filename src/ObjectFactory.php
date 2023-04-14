@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -31,7 +32,7 @@ class ObjectFactory
      *
      * @var array
      */
-    private $_modifiedObjects = array();
+    private $_modifiedObjects = [];
 
     /**
      * List of the removed objects
@@ -50,7 +51,7 @@ class ObjectFactory
      *
      * @var array
      */
-    private $_registeredObjects = array();
+    private $_registeredObjects = [];
 
     /**
      * PDF object counter.
@@ -67,7 +68,7 @@ class ObjectFactory
      *
      * @var array
      */
-    private $_attachedFactories = array();
+    private $_attachedFactories = [];
 
 
     /**
@@ -90,7 +91,7 @@ class ObjectFactory
      *
      * @var array
      */
-    private $_shiftCalculationCache = array();
+    private $_shiftCalculationCache = [];
 
 
     /**
@@ -232,7 +233,7 @@ class ObjectFactory
      */
     public function cleanEnumerationShiftCache()
     {
-        $this->_shiftCalculationCache = array();
+        $this->_shiftCalculationCache = [];
 
         foreach ($this->_attachedFactories as $attached) {
             $attached->cleanEnumerationShiftCache();
@@ -337,17 +338,21 @@ class ObjectFactory
 
         ksort($this->_modifiedObjects);
 
-        $result = array();
+        $result = [];
         foreach ($this->_modifiedObjects as $objNum => $obj) {
             if ($this->_removedObjects->contains($obj)) {
-                $result[$objNum + $shift] = new UpdateInfoContainer($objNum + $shift,
+                $result[$objNum + $shift] = new UpdateInfoContainer(
+                    $objNum + $shift,
                     $obj->getGenNum() + 1,
-                    true);
+                    true
+                );
             } else {
-                $result[$objNum + $shift] = new UpdateInfoContainer($objNum + $shift,
+                $result[$objNum + $shift] = new UpdateInfoContainer(
+                    $objNum + $shift,
                     $obj->getGenNum(),
                     false,
-                    $obj->dump($rootFactory));
+                    $obj->dump($rootFactory)
+                );
             }
         }
 

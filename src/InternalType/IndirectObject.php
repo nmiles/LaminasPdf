@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -60,11 +61,12 @@ class IndirectObject extends AbstractTypeObject
      * @param \LaminasPdf\ObjectFactory $factory
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
-    public function __construct(AbstractTypeObject $val,
-                                $objNum,
-                                $genNum,
-                                ObjectFactory $factory)
-    {
+    public function __construct(
+        AbstractTypeObject $val,
+        $objNum,
+        $genNum,
+        ObjectFactory $factory
+    ) {
         if ($val instanceof self) {
             throw new Exception\RuntimeException('Object number must not be an instance of \LaminasPdf\InternalType\IndirectObject.');
         }
@@ -197,7 +199,7 @@ class IndirectObject extends AbstractTypeObject
      */
     public function __call($method, $args)
     {
-        return call_user_func_array(array($this->_value, $method), $args);
+        return call_user_func_array([$this->_value, $method], $args);
     }
 
     /**

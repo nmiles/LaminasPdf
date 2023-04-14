@@ -43,7 +43,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
      */
     private $_originaltimezone;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_originaltimezone = date_default_timezone_get();
         date_default_timezone_set('GMT');
@@ -52,7 +52,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
     /**
      * Teardown environment
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         date_default_timezone_set($this->_originaltimezone);
     }
@@ -89,7 +89,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
         // Draw rectangle
         $page2->setFillColor(new Color\GrayScale(0.8))
             ->setLineColor(new Color\GrayScale(0.2))
-            ->setLineDashingPattern(array(3, 2, 3, 4), 1.6)
+            ->setLineDashingPattern([3, 2, 3, 4], 1.6)
             ->drawRectangle(60, 400, 500, 350);
 
         // Draw rounded rectangle
@@ -120,8 +120,8 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
 
         // Draw and fill polygon
         $page2->setFillColor(new Color\Rgb(1, 0, 1));
-        $x = array();
-        $y = array();
+        $x = [];
+        $y = [];
         for ($count = 0; $count < 8; $count++) {
             $x[] = 140 + 25 * cos(3 * M_PI_4 * $count);
             $y[] = 375 + 25 * sin(3 * M_PI_4 * $count);
@@ -151,7 +151,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
         // Draw rectangle
         $page3->setFillColor(new Color\GrayScale(0.8))
             ->setLineColor(new Color\GrayScale(0.2))
-            ->setLineDashingPattern(array(3, 2, 3, 4), 1.6)
+            ->setLineDashingPattern([3, 2, 3, 4], 1.6)
             ->drawRectangle(60, 400, 500, 350);
 
         // Draw rounded rectangle
@@ -183,8 +183,8 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
 
         // Draw and fill polygon
         $page3->setFillColor(new Color\Rgb(1, 0, 1));
-        $x = array();
-        $y = array();
+        $x = [];
+        $y = [];
         for ($count = 0; $count < 8; $count++) {
             $x[] = 140 + 25 * cos(3 * M_PI_4 * $count);
             $y[] = 375 + 25 * sin(3 * M_PI_4 * $count);
@@ -277,23 +277,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
 
         $pdf = new Pdf\PdfDocument();
 
-        $fontsList = array(Pdf\Font::FONT_COURIER,
-            Pdf\Font::FONT_COURIER_BOLD,
-            Pdf\Font::FONT_COURIER_BOLD_ITALIC,
-            Pdf\Font::FONT_COURIER_BOLD_OBLIQUE,
-            Pdf\Font::FONT_COURIER_ITALIC,
-            Pdf\Font::FONT_COURIER_OBLIQUE,
-            Pdf\Font::FONT_HELVETICA,
-            Pdf\Font::FONT_HELVETICA_BOLD,
-            Pdf\Font::FONT_HELVETICA_BOLD_ITALIC,
-            Pdf\Font::FONT_HELVETICA_BOLD_OBLIQUE,
-            Pdf\Font::FONT_HELVETICA_ITALIC,
-            Pdf\Font::FONT_HELVETICA_OBLIQUE,
-            Pdf\Font::FONT_TIMES,
-            Pdf\Font::FONT_TIMES_BOLD,
-            Pdf\Font::FONT_TIMES_BOLD_ITALIC,
-            Pdf\Font::FONT_TIMES_ITALIC,
-            Pdf\Font::FONT_TIMES_ROMAN);
+        $fontsList = [Pdf\Font::FONT_COURIER, Pdf\Font::FONT_COURIER_BOLD, Pdf\Font::FONT_COURIER_BOLD_ITALIC, Pdf\Font::FONT_COURIER_BOLD_OBLIQUE, Pdf\Font::FONT_COURIER_ITALIC, Pdf\Font::FONT_COURIER_OBLIQUE, Pdf\Font::FONT_HELVETICA, Pdf\Font::FONT_HELVETICA_BOLD, Pdf\Font::FONT_HELVETICA_BOLD_ITALIC, Pdf\Font::FONT_HELVETICA_BOLD_OBLIQUE, Pdf\Font::FONT_HELVETICA_ITALIC, Pdf\Font::FONT_HELVETICA_OBLIQUE, Pdf\Font::FONT_TIMES, Pdf\Font::FONT_TIMES_BOLD, Pdf\Font::FONT_TIMES_BOLD_ITALIC, Pdf\Font::FONT_TIMES_ITALIC, Pdf\Font::FONT_TIMES_ROMAN];
 
         $titleFont = Pdf\Font::fontWithName(Pdf\Font::FONT_COURIER_BOLD_OBLIQUE);
 
@@ -346,10 +330,9 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
         }
 
         $nonAlphabeticalPhonts =
-            array(Pdf\Font::FONT_SYMBOL =>
-                "\x00\x20\x00\x21\x22\x00\x00\x23\x22\x03\x00\x25\x00\x26\x22\x0b\x00\x28\x00\x29\x22\x17\x00\x2b\x00\x2c\x22\x12\x00\x2e\x00\x2f\x00\x30\x00\x31\x00\x32\x00\x33\x00\x34\x00\x35\x00\x36\x00\x37\x00\x38\x00\x39\x00\x3a\x00\x3b\x00\x3c\x00\x3d\x00\x3e\x00\x3f\x22\x45\x03\x91\x03\x92\x03\xa7\x22\x06\x03\x95\x03\xa6",
-                Pdf\Font::FONT_ZAPFDINGBATS =>
-                    "\x00\x20\x27\x01\x27\x02\x27\x03\x27\x04\x26\x0e\x27\x06\x27\x07\x27\x08\x27\x09\x26\x1b\x26\x1e\x27\x0c\x27\x0d\x27\x0e\x27\x0f\x27\x10\x27\x11\x27\x12\x27\x13\x27\x14\x27\x15\x27\x16\x27\x17\x27\x18\x27\x19\x27\x1a");
+            [Pdf\Font::FONT_SYMBOL =>
+                "\x00\x20\x00\x21\x22\x00\x00\x23\x22\x03\x00\x25\x00\x26\x22\x0b\x00\x28\x00\x29\x22\x17\x00\x2b\x00\x2c\x22\x12\x00\x2e\x00\x2f\x00\x30\x00\x31\x00\x32\x00\x33\x00\x34\x00\x35\x00\x36\x00\x37\x00\x38\x00\x39\x00\x3a\x00\x3b\x00\x3c\x00\x3d\x00\x3e\x00\x3f\x22\x45\x03\x91\x03\x92\x03\xa7\x22\x06\x03\x95\x03\xa6", Pdf\Font::FONT_ZAPFDINGBATS =>
+                "\x00\x20\x27\x01\x27\x02\x27\x03\x27\x04\x26\x0e\x27\x06\x27\x07\x27\x08\x27\x09\x26\x1b\x26\x1e\x27\x0c\x27\x0d\x27\x0e\x27\x0f\x27\x10\x27\x11\x27\x12\x27\x13\x27\x14\x27\x15\x27\x16\x27\x17\x27\x18\x27\x19\x27\x1a"];
         foreach ($nonAlphabeticalPhonts as $fontName => $example) {
             // Add new page generated by LaminasPdf object (page is attached to the specified the document)
             $pdf->pages[] = ($page = $pdf->newPage(Pdf\Page::SIZE_A4_LANDSCAPE));
@@ -398,16 +381,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
             $font->widthForGlyph(10);
         }
 
-        $TTFFontsList = array('VeraBd.ttf',
-            'VeraBI.ttf',
-            'VeraIt.ttf',
-            'VeraMoBd.ttf',
-            'VeraMoBI.ttf',
-            'VeraMoIt.ttf',
-            'VeraMono.ttf',
-            'VeraSeBd.ttf',
-            'VeraSe.ttf',
-            'Vera.ttf');
+        $TTFFontsList = ['VeraBd.ttf', 'VeraBI.ttf', 'VeraIt.ttf', 'VeraMoBd.ttf', 'VeraMoBI.ttf', 'VeraMoIt.ttf', 'VeraMono.ttf', 'VeraSeBd.ttf', 'VeraSe.ttf', 'Vera.ttf'];
 
         foreach ($TTFFontsList as $fontName) {
             // Add new page generated by LaminasPdf object (page is attached to the specified the document)
@@ -475,9 +449,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
 
         $pdf = new Pdf\PdfDocument();
 
-        $fontsList = array(Pdf\Font::FONT_COURIER,
-            Pdf\Font::FONT_HELVETICA_BOLD,
-            Pdf\Font::FONT_TIMES_BOLD_ITALIC);
+        $fontsList = [Pdf\Font::FONT_COURIER, Pdf\Font::FONT_HELVETICA_BOLD, Pdf\Font::FONT_TIMES_BOLD_ITALIC];
 
         foreach ($fontsList as $fontName) {
             // Add new page generated by LaminasPdf object (page is attached to the specified the document)
@@ -492,16 +464,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
             $type = $font->getFontType();
         }
 
-        $TTFFontsList = array('VeraBd.ttf',
-            'VeraBI.ttf',
-            'VeraIt.ttf',
-            'VeraMoBd.ttf',
-            'VeraMoBI.ttf',
-            'VeraMoIt.ttf',
-            'VeraMono.ttf',
-            'VeraSeBd.ttf',
-            'VeraSe.ttf',
-            'Vera.ttf');
+        $TTFFontsList = ['VeraBd.ttf', 'VeraBI.ttf', 'VeraIt.ttf', 'VeraMoBd.ttf', 'VeraMoBI.ttf', 'VeraMoIt.ttf', 'VeraMono.ttf', 'VeraSeBd.ttf', 'VeraSe.ttf', 'Vera.ttf'];
 
         foreach ($TTFFontsList as $fontName) {
             // Add new page generated by LaminasPdf object (page is attached to the specified the document)
@@ -520,10 +483,10 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
 
         $pdf1 = Pdf\PdfDocument::load(__DIR__ . '/_files/output.pdf');
 
-        $newPages = array();
+        $newPages = [];
 
-        $fontList = array();
-        $fontNames = array();
+        $fontList = [];
+        $fontNames = [];
         foreach ($pdf1->pages as $page) {
             $pageFonts = $page->extractFonts();
             foreach ($pageFonts as $font) {
@@ -532,19 +495,7 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals(array(Pdf\Font::FONT_COURIER,
-            Pdf\Font::FONT_HELVETICA_BOLD,
-            Pdf\Font::FONT_TIMES_BOLD_ITALIC,
-            'BitstreamVeraSans-Bold',
-            'BitstreamVeraSans-BoldOblique',
-            'BitstreamVeraSans-Oblique',
-            'BitstreamVeraSansMono-Bold',
-            'BitstreamVeraSansMono-BoldOb',
-            'BitstreamVeraSansMono-Oblique',
-            'BitstreamVeraSansMono-Roman',
-            'BitstreamVeraSerif-Bold',
-            'BitstreamVeraSerif-Roman',
-            'BitstreamVeraSans-Roman'),
+        $this->assertEquals([Pdf\Font::FONT_COURIER, Pdf\Font::FONT_HELVETICA_BOLD, Pdf\Font::FONT_TIMES_BOLD_ITALIC, 'BitstreamVeraSans-Bold', 'BitstreamVeraSans-BoldOblique', 'BitstreamVeraSans-Oblique', 'BitstreamVeraSansMono-Bold', 'BitstreamVeraSansMono-BoldOb', 'BitstreamVeraSansMono-Oblique', 'BitstreamVeraSansMono-Roman', 'BitstreamVeraSerif-Bold', 'BitstreamVeraSerif-Roman', 'BitstreamVeraSans-Roman'],
             $fontNames);
 
         $pdf1->pages[] = ($page = $pdf1->newPage(Pdf\Page::SIZE_A4));
@@ -555,23 +506,11 @@ class DrawingTest extends \PHPUnit\Framework\TestCase
             $yPosition -= 30;
         }
 
-        $fontNames1 = array();
+        $fontNames1 = [];
         foreach ($pdf1->extractFonts() as $font) {
             $fontNames1[] = $font->getFontName(Pdf\Font::NAME_POSTSCRIPT, 'en', 'UTF-8');
         }
-        $this->assertEquals(array(Pdf\Font::FONT_COURIER,
-            Pdf\Font::FONT_HELVETICA_BOLD,
-            Pdf\Font::FONT_TIMES_BOLD_ITALIC,
-            'BitstreamVeraSans-Bold',
-            'BitstreamVeraSans-BoldOblique',
-            'BitstreamVeraSans-Oblique',
-            'BitstreamVeraSansMono-Bold',
-            'BitstreamVeraSansMono-BoldOb',
-            'BitstreamVeraSansMono-Oblique',
-            'BitstreamVeraSansMono-Roman',
-            'BitstreamVeraSerif-Bold',
-            'BitstreamVeraSerif-Roman',
-            'BitstreamVeraSans-Roman'),
+        $this->assertEquals([Pdf\Font::FONT_COURIER, Pdf\Font::FONT_HELVETICA_BOLD, Pdf\Font::FONT_TIMES_BOLD_ITALIC, 'BitstreamVeraSans-Bold', 'BitstreamVeraSans-BoldOblique', 'BitstreamVeraSans-Oblique', 'BitstreamVeraSansMono-Bold', 'BitstreamVeraSansMono-BoldOb', 'BitstreamVeraSansMono-Oblique', 'BitstreamVeraSansMono-Roman', 'BitstreamVeraSerif-Bold', 'BitstreamVeraSerif-Roman', 'BitstreamVeraSans-Roman'],
             $fontNames1);
 
         $page = reset($pdf1->pages);

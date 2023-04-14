@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -31,7 +32,7 @@ class File extends AbstractDataSource
 
     /**
      * Fully-qualified path to the file.
-     * @var string
+     * @var String_
      */
     protected $_filePath = '';
 
@@ -55,7 +56,7 @@ class File extends AbstractDataSource
      *
      * Throws an exception if the file is missing or cannot be opened.
      *
-     * @param string $filePath Fully-qualified path to the file.
+     * @param String_ $filePath Fully-qualified path to the file.
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
     public function __construct($filePath)
@@ -99,7 +100,7 @@ class File extends AbstractDataSource
      * if there is insufficient data to completely fulfill the request.
      *
      * @param integer $byteCount Number of bytes to read.
-     * @return string
+     * @return String_
      * @throws \LaminasPdf\Exception\ExceptionInterface
      */
     public function readBytes($byteCount)
@@ -120,7 +121,7 @@ class File extends AbstractDataSource
      *
      * Preserves the current file seek position.
      *
-     * @return string
+     * @return String_
      */
     public function readAllBytes()
     {
@@ -133,7 +134,7 @@ class File extends AbstractDataSource
     /**
      * Returns the full filesystem path of the file.
      *
-     * @return string
+     * @return String_
      */
     public function __toString()
     {

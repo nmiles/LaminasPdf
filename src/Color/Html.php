@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -24,7 +25,6 @@ use LaminasPdf\Exception;
  */
 class Html implements ColorInterface
 {
-
     /**
      * Color
      *

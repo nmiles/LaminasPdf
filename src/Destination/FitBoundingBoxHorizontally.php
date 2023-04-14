@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -69,7 +70,7 @@ class FitBoundingBoxHorizontally extends AbstractExplicitDestination
      * Set top edge of the displayed page
      *
      * @param float $top
-     * @return \LaminasPdf\Action\FitBoundingBoxHorizontally
+     * @return FitBoundingBoxHorizontally
      */
     public function setTopEdge($top)
     {

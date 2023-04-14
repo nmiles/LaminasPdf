@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -134,7 +135,7 @@ class Style
     public function setLineDashingPattern($pattern, $phase = 0)
     {
         if ($pattern === Page::LINE_DASHING_SOLID) {
-            $pattern = array();
+            $pattern = [];
             $phase = 0;
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -33,12 +34,12 @@ class PdfDocument
     /**
      * Version number of generated PDF documents.
      */
-    const PDF_VERSION = '1.4';
+    public const PDF_VERSION = '1.4';
 
     /**
      * PDF file header.
      */
-    const PDF_HEADER = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
+    public const PDF_HEADER = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
 
 
     /**
@@ -50,7 +51,7 @@ class PdfDocument
      *
      * @var array   - array of \LaminasPdf\Page object
      */
-    public $pages = array();
+    public $pages = [];
 
     /**
      * Document properties
@@ -67,7 +68,7 @@ class PdfDocument
      *
      * @var array
      */
-    public $properties = array();
+    public $properties = [];
 
     /**
      * Original properties set.
@@ -76,7 +77,7 @@ class PdfDocument
      *
      * @var array
      */
-    protected $_originalProperties = array();
+    protected $_originalProperties = [];
 
     /**
      * Document level javascript
@@ -91,14 +92,14 @@ class PdfDocument
      *
      * @var array   - array of \LaminasPdf\InternalStructure\NavigationTarget objects
      */
-    protected $_namedTargets = array();
+    protected $_namedTargets = [];
 
     /**
      * Document outlines
      *
      * @var array - array of \LaminasPdf\Outline\AbstractOutline objects
      */
-    public $outlines = array();
+    public $outlines = [];
 
     /**
      * Original document outlines list
@@ -106,7 +107,7 @@ class PdfDocument
      *
      * @var array - array of \LaminasPdf\Outline\AbstractOutline objects
      */
-    protected $_originalOutlines = array();
+    protected $_originalOutlines = [];
 
     /**
      * Original document outlines open elements count
@@ -151,7 +152,7 @@ class PdfDocument
      *
      * @var array
      */
-    protected static $_inheritableAttributes = array('Resources', 'MediaBox', 'CropBox', 'Rotate');
+    protected static $_inheritableAttributes = ['Resources', 'MediaBox', 'CropBox', 'Rotate'];
 
     /**
      * Request used memory manager
@@ -170,7 +171,7 @@ class PdfDocument
     /**
      * Set user defined memory manager
      *
-     * @param Laminas\Memory\MemoryManager $memoryManager
+     * @param Memory\MemoryManager $memoryManager
      */
     public static function setMemoryManager(Memory\MemoryManager $memoryManager)
     {
@@ -294,7 +295,7 @@ class PdfDocument
             /**
              * Document id
              */
-            $docId = md5(uniqid(rand(), true));   // 32 byte (128 bit) identifier
+            $docId = md5(uniqid(random_int(0, mt_getrandmax()), true));   // 32 byte (128 bit) identifier
             $docIdLow = substr($docId, 0, 16);  // first 16 bytes
             $docIdHigh = substr($docId, 16, 16);  // second 16 bytes
 
@@ -364,7 +365,7 @@ class PdfDocument
         // Mark content as modified to force new trailer generation at render time
         $this->_trailer->Root->touch();
 
-        $this->pages = array();
+        $this->pages = [];
         $this->_loadPages($this->_trailer->Root->Pages);
     }
 
@@ -375,7 +376,7 @@ class PdfDocument
      * @param \LaminasPdf\InternalType\IndirectObjectReference $pages
      * @param array|null $attributes
      */
-    protected function _loadPages(InternalType\IndirectObjectReference $pages, $attributes = array())
+    protected function _loadPages(InternalType\IndirectObjectReference $pages, $attributes = [])
     {
         if ($pages->getType() != InternalType\AbstractTypeObject::TYPE_DICTIONARY) {
             throw new Exception\CorruptedPdfException('Wrong argument');
@@ -400,8 +401,10 @@ class PdfDocument
                          * If any attribute or dependant object is an indirect object, then it's still
                          * shared between pages.
                          */
-                        if ($attributes[$property] instanceof InternalType\IndirectObject ||
-                            $attributes[$property] instanceof InternalType\IndirectObjectReference) {
+                        if (
+                            $attributes[$property] instanceof InternalType\IndirectObject ||
+                            $attributes[$property] instanceof InternalType\IndirectObjectReference
+                        ) {
                             $child->$property = $attributes[$property];
                         } else {
                             $child->$property = $this->_objFactory->newObject($attributes[$property]);
@@ -506,7 +509,7 @@ class PdfDocument
         $pagesContainer = $root->Pages;
 
         $pagesContainer->touch();
-        $pagesContainer->Kids->items = array();
+        $pagesContainer->Kids->items = [];
 
         foreach ($this->pages as $page) {
             $page->render($this->_objFactory);
@@ -593,7 +596,7 @@ class PdfDocument
     {
         ksort($this->_namedTargets, SORT_STRING);
 
-        $destArrayItems = array();
+        $destArrayItems = [];
         foreach ($this->_namedTargets as $name => $destination) {
             $destArrayItems[] = new InternalType\StringObject($name);
 
@@ -833,9 +836,11 @@ class PdfDocument
      */
     public function setNamedDestination($name, $destination = null)
     {
-        if ($destination !== null &&
+        if (
+            $destination !== null &&
             !$destination instanceof Action\GoToAction &&
-            !$destination instanceof Destination\AbstractExplicitDestination) {
+            !$destination instanceof Destination\AbstractExplicitDestination
+        ) {
             throw new Exception\InvalidArgumentException('PDF named destination must refer an explicit destination or a GoTo PDF action.');
         }
 
@@ -869,8 +874,8 @@ class PdfDocument
      */
     protected function _refreshPagesHash()
     {
-        $this->_pageReferences = array();
-        $this->_pageNumbers = array();
+        $this->_pageReferences = [];
+        $this->_pageNumbers = [];
         $count = 1;
         foreach ($this->pages as $page) {
             $pageDictionaryHashId = spl_object_hash($page->getPageDictionary()->getObject());
@@ -954,8 +959,10 @@ class PdfDocument
         }
 
         // Named target is an action
-        if ($action instanceof Action\GoToAction &&
-            $this->resolveDestination($action->getDestination(), false) === null) {
+        if (
+            $action instanceof Action\GoToAction &&
+            $this->resolveDestination($action->getDestination(), false) === null
+        ) {
             // Action itself is a GoTo action with an unresolved destination
             return null;
         }
@@ -963,11 +970,13 @@ class PdfDocument
         // Walk through child actions
         $iterator = new \RecursiveIteratorIterator($action, \RecursiveIteratorIterator::SELF_FIRST);
 
-        $actionsToClean = array();
-        $deletionCandidateKeys = array();
+        $actionsToClean = [];
+        $deletionCandidateKeys = [];
         foreach ($iterator as $chainedAction) {
-            if ($chainedAction instanceof Action\GoToAction &&
-                $this->resolveDestination($chainedAction->getDestination(), false) === null) {
+            if (
+                $chainedAction instanceof Action\GoToAction &&
+                $this->resolveDestination($chainedAction->getDestination(), false) === null
+            ) {
                 // Some child action is a GoTo action with an unresolved destination
                 // Mark it as a candidate for deletion
                 $actionsToClean[] = $iterator->getSubIterator();
@@ -991,7 +1000,7 @@ class PdfDocument
      */
     public function extractFonts()
     {
-        $fontResourcesUnique = array();
+        $fontResourcesUnique = [];
         foreach ($this->pages as $page) {
             $pageResources = $page->extractResources();
 
@@ -1005,8 +1014,10 @@ class PdfDocument
             foreach ($fontResources->getKeys() as $fontResourceName) {
                 $fontDictionary = $fontResources->$fontResourceName;
 
-                if (!($fontDictionary instanceof InternalType\IndirectObjectReference ||
-                    $fontDictionary instanceof InternalType\IndirectObject)) {
+                if (
+                    !($fontDictionary instanceof InternalType\IndirectObjectReference ||
+                    $fontDictionary instanceof InternalType\IndirectObject)
+                ) {
                     throw new Exception\CorruptedPdfException('Font dictionary has to be an indirect object or object reference.');
                 }
 
@@ -1014,7 +1025,7 @@ class PdfDocument
             }
         }
 
-        $fonts = array();
+        $fonts = [];
         foreach ($fontResourcesUnique as $resourceId => $fontDictionary) {
             try {
                 // Try to extract font
@@ -1041,7 +1052,7 @@ class PdfDocument
      */
     public function extractFont($fontName)
     {
-        $fontResourcesUnique = array();
+        $fontResourcesUnique = [];
         foreach ($this->pages as $page) {
             $pageResources = $page->extractResources();
 
@@ -1055,8 +1066,10 @@ class PdfDocument
             foreach ($fontResources->getKeys() as $fontResourceName) {
                 $fontDictionary = $fontResources->$fontResourceName;
 
-                if (!($fontDictionary instanceof InternalType\IndirectObjectReference ||
-                    $fontDictionary instanceof InternalType\IndirectObject)) {
+                if (
+                    !($fontDictionary instanceof InternalType\IndirectObjectReference ||
+                    $fontDictionary instanceof InternalType\IndirectObject)
+                ) {
                     throw new Exception\CorruptedPdfException('Font dictionary has to be an indirect object or object reference.');
                 }
 
@@ -1098,6 +1111,7 @@ class PdfDocument
      */
     public function render($newSegmentOnly = false, $outputStream = null)
     {
+        $pdfSegmentBlocks = [];
         // Save document properties if necessary
         if ($this->properties != $this->_originalProperties) {
             $docInfo = $this->_objFactory->newObject(new InternalType\DictionaryObject());
@@ -1189,12 +1203,12 @@ class PdfDocument
         $lastFreeObject = $this->_trailer->getLastFreeObject();
 
         // Array of cross-reference table subsections
-        $xrefTable = array();
+        $xrefTable = [];
         // Object numbers of first objects in each subsection
-        $xrefSectionStartNums = array();
+        $xrefSectionStartNums = [];
 
         // Last cross-reference table subsection
-        $xrefSection = array();
+        $xrefSection = [];
         // Dummy initialization of the first element (specail case - header of linked list of free objects).
         $xrefSection[] = 0;
         $xrefSectionStartNums[] = 0;
@@ -1211,7 +1225,7 @@ class PdfDocument
                 }
             }
         } else {
-            $pdfSegmentBlocks = ($newSegmentOnly) ? array() : array($this->_trailer->getPDFString());
+            $pdfSegmentBlocks = ($newSegmentOnly) ? [] : [$this->_trailer->getPDFString()];
         }
 
         // Iterate objects to create new reference table
@@ -1221,7 +1235,7 @@ class PdfDocument
             if ($objNum - $lastObjNum != 1) {
                 // Save cross-reference table subsection and start new one
                 $xrefTable[] = $xrefSection;
-                $xrefSection = array();
+                $xrefSection = [];
                 $xrefSectionStartNums[] = $objNum;
             }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -39,9 +40,11 @@ class Link extends AbstractAnnotation
             throw new Exception\CorruptedPdfException('Annotation dictionary resource has to be a dictionary.');
         }
 
-        if ($annotationDictionary->Subtype === null ||
+        if (
+            $annotationDictionary->Subtype === null ||
             $annotationDictionary->Subtype->getType() != InternalType\AbstractTypeObject::TYPE_NAME ||
-            $annotationDictionary->Subtype->value != 'Link') {
+            $annotationDictionary->Subtype->value != 'Link'
+        ) {
             throw new Exception\CorruptedPdfException('Subtype => Link entry is requires');
         }
 
@@ -96,6 +99,7 @@ class Link extends AbstractAnnotation
      */
     public function setDestination($target)
     {
+        $destination = null;
         if (is_string($target)) {
             $destination = Destination\Named::create($target);
         }
@@ -123,8 +127,10 @@ class Link extends AbstractAnnotation
      */
     public function getDestination()
     {
-        if ($this->_annotationDictionary->Dest === null &&
-            $this->_annotationDictionary->A === null) {
+        if (
+            $this->_annotationDictionary->Dest === null &&
+            $this->_annotationDictionary->A === null
+        ) {
             return null;
         }
 
