@@ -77,7 +77,7 @@ class FontDescriptor
          * determined from the font parser.
          */
         $flags = 0;
-        if ($fontParser->isMonospaced) {    // bit 1: FixedPitch
+        if ($fontParser->isMonospace) {    // bit 1: FixedPitch
             $flags |= 1 << 0;
         }
         if ($fontParser->isSerifFont) {    // bit 2: Serif

@@ -81,7 +81,7 @@ class Courier extends AbstractStandard
 
         $this->_isBold = false;
         $this->_isItalic = false;
-        $this->_isMonospaced = true;
+        $this->_isMonospace = true;
 
         $this->_underlinePosition = -100;
         $this->_underlineThickness = 50;
