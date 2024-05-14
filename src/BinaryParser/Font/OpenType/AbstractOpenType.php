@@ -577,6 +577,17 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
              * outlines from fonts yet, so this means no embed.
              */
             $this->isEmbeddable = false;
+        } elseif ($this->isBitSet(2, $embeddingFlags)
+                || $this->isBitSet(3, $embeddingFlags)
+                || $this->isBitSet(4, $embeddingFlags)
+            ) {
+            /* One of:
+            *     Restricted License embedding (0x0002)
+            *     Preview & Print embedding (0x0004)
+            *     Editable embedding (0x0008)
+            * is set.  This was in Zf1/Pdf but was removed in Zf2/Laminas ...
+            */
+            $this->isEmbeddable = true;
         } elseif ($this->isBitSet(1, $embeddingFlags)) {
             /* Restricted license embedding. We currently don't have any way to
              * enforce this, so interpret this as no embed. This may be revised
