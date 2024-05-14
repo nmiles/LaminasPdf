@@ -83,7 +83,7 @@ class CourierBoldOblique extends AbstractStandard
 
         $this->_isBold = true;
         $this->_isItalic = true;
-        $this->_isMonospaced = true;
+        $this->_isMonospace = true;
 
         $this->_underlinePosition = -100;
         $this->_underlineThickness = 50;

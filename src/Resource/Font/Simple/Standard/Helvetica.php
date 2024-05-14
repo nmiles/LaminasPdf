@@ -91,7 +91,7 @@ class Helvetica extends AbstractStandard
 
         $this->_isBold = false;
         $this->_isItalic = false;
-        $this->_isMonospaced = false;
+        $this->_isMonospace = false;
 
         $this->_underlinePosition = -100;
         $this->_underlineThickness = 50;

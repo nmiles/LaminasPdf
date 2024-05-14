@@ -385,7 +385,7 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
         $this->underlineThickness = $this->readInt(2);
 
         $fixedPitch = $this->readUInt(4);
-        $this->isMonospaced = ($fixedPitch !== 0);
+        $this->isMonospace = ($fixedPitch !== 0);
 
         /* Skip over PostScript virtual memory usage.
          */
