@@ -82,7 +82,7 @@ class CourierBold extends AbstractStandard
 
         $this->_isBold = true;
         $this->_isItalic = false;
-        $this->_isMonospaced = true;
+        $this->_isMonospace = true;
 
         $this->_underlinePosition = -100;
         $this->_underlineThickness = 50;

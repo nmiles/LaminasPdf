@@ -82,7 +82,7 @@ abstract class AbstractCidFont extends FontResource\AbstractFont
 
         $this->_isBold = $fontParser->isBold;
         $this->_isItalic = $fontParser->isItalic;
-        $this->_isMonospaced = $fontParser->isMonospaced;
+        $this->_isMonospace = $fontParser->isMonospace;
 
         $this->_underlinePosition = $fontParser->underlinePosition;
         $this->_underlineThickness = $fontParser->underlineThickness;
