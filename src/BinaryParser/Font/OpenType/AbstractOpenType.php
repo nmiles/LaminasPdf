@@ -543,11 +543,15 @@ abstract class AbstractOpenType extends Pdf\BinaryParser\Font\AbstractFont
          * case alphabetic characters; this doesn't affect us. Second, in
          * version 3, the embedding bits (fsType field) have been made mutually
          * exclusive; see additional discusson on this below.
-         *
+         * 
          * We can understand all four of these table versions.
+         * bickns: Came across a YuGothic font with version 4 OS/2 table.  It was a 
+         * Microsoft font, so I assume it is valid.  The only difference between 
+         * version 3 and 4 is that the version 4 table has an additional field at 
+         * the end of the table.  So, we will treat it as a version 3 table.
          */
         $tableVersion = $this->readUInt(2);
-        if (($tableVersion < 0) || ($tableVersion > 3)) {
+        if (($tableVersion < 0) || ($tableVersion > 4)) {
             throw new Exception\CorruptedFontException("Unable to read version $tableVersion table");
         }
         $this->_debugLog('Version %d table', $tableVersion);
