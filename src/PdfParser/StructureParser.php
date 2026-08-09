@@ -153,7 +153,7 @@ class StructureParser
                     switch ($inUseKey) {
                         case 'f':
                             // free entry
-                            unset($this->_refTable[$objNum . ' ' . $genNumber . ' R']);
+                            // unset($this->_refTable[$objNum . ' ' . $genNumber . ' R']);
                             $refTable->addReference(
                                 $objNum . ' ' . $genNumber . ' R',
                                 $objectOffset,

@@ -757,7 +757,7 @@ class PdfDocument
      * @param \LaminasPdf\InternalStructure\NavigationTarget $openAction
      * @returns LaminasPdf
      */
-    public function setOpenAction(InternalStructure\NavigationTarget $openAction = null)
+    public function setOpenAction(?InternalStructure\NavigationTarget $openAction = null)
     {
         $root = $this->_trailer->Root;
         $root->touch();

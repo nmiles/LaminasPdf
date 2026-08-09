@@ -56,7 +56,7 @@ class NullObject extends AbstractTypeObject
      * @param \LaminasPdf\ObjectFactory $factory
      * @return string
      */
-    public function toString(Pdf\ObjectFactory $factory = null)
+    public function toString(?Pdf\ObjectFactory $factory = null)
     {
         return 'null';
     }

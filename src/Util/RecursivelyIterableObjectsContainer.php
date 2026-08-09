@@ -11,6 +11,8 @@
 
 namespace LaminasPdf\Util;
 
+use \RecursiveIterator;
+
 /**
  * Iteratable objects container
  *
@@ -26,42 +28,42 @@ class RecursivelyIterableObjectsContainer implements \RecursiveIterator, \Counta
         $this->_objects = $objects;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return current($this->_objects);
     }
 
-    public function key()
+    public function key(): mixed
     {
         return key($this->_objects);
     }
 
-    public function next()
+    public function next(): void
     {
-        return next($this->_objects);
+        next($this->_objects);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
-        return reset($this->_objects);
+        reset($this->_objects);
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return current($this->_objects) !== false;
     }
 
-    public function getChildren()
+    public function getChildren(): ?RecursiveIterator
     {
         return current($this->_objects);
     }
 
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return count($this->_objects) > 0;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->_objects);
     }

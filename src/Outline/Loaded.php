@@ -281,7 +281,7 @@ class Loaded extends AbstractOutline
      * @throws \LaminasPdf\Exception\ExceptionInterface
      * @internal
      */
-    public function __construct(InternalType\AbstractTypeObject $dictionary, \SplObjectStorage $processedDictionaries = null)
+    public function __construct(InternalType\AbstractTypeObject $dictionary, ?\SplObjectStorage $processedDictionaries = null)
     {
         if ($dictionary->getType() != InternalType\AbstractTypeObject::TYPE_DICTIONARY) {
             throw new Exception\CorruptedPdfException('$dictionary mast be an indirect dictionary object.');

@@ -54,7 +54,7 @@ abstract class AbstractTypeObject
      * @param \LaminasPdf\ObjectFactory $factory
      * @return string
      */
-    abstract public function toString(Pdf\ObjectFactory $factory = null);
+    abstract public function toString(?Pdf\ObjectFactory $factory = null);
 
 
     public const CLONE_MODE_SKIP_PAGES = 1; // Do not follow pages during deep copy process

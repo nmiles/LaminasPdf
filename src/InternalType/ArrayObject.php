@@ -97,7 +97,7 @@ class ArrayObject extends AbstractTypeObject
      * @param \LaminasPdf\ObjectFactory $factory
      * @return string
      */
-    public function toString(Pdf\ObjectFactory $factory = null)
+    public function toString(?Pdf\ObjectFactory $factory = null)
     {
         $outStr = '[';
         $lastNL = 0;

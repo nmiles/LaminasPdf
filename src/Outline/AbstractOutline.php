@@ -284,7 +284,7 @@ abstract class AbstractOutline implements
      *
      * @return \LaminasPdf\Outline\AbstractOutline
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->childOutlines);
     }
@@ -294,7 +294,7 @@ abstract class AbstractOutline implements
      *
      * @return integer
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->childOutlines);
     }
@@ -302,17 +302,17 @@ abstract class AbstractOutline implements
     /**
      * Go to next child
      */
-    public function next()
+    public function next(): void
     {
-        return next($this->childOutlines);
+        next($this->childOutlines);
     }
 
     /**
      * Rewind children
      */
-    public function rewind()
+    public function rewind(): void
     {
-        return reset($this->childOutlines);
+        reset($this->childOutlines);
     }
 
     /**
@@ -320,7 +320,7 @@ abstract class AbstractOutline implements
      *
      * @return boolean
      */
-    public function valid()
+    public function valid(): bool
     {
         return current($this->childOutlines) !== false;
     }
@@ -330,7 +330,7 @@ abstract class AbstractOutline implements
      *
      * @return \LaminasPdf\Outline\AbstractOutline|null
      */
-    public function getChildren()
+    public function getChildren(): ?RecursiveIterator
     {
         return current($this->childOutlines);
     }
@@ -340,7 +340,7 @@ abstract class AbstractOutline implements
      *
      * @return bool  whether container has any pages
      */
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return count($this->childOutlines) > 0;
     }
@@ -355,7 +355,7 @@ abstract class AbstractOutline implements
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->childOutlines);
     }

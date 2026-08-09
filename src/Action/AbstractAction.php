@@ -100,7 +100,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      * @throws \LaminasPdf\Exception\ExceptionInterface
      * @internal
      */
-    public static function load(InternalType\AbstractTypeObject $dictionary, \SplObjectStorage $processedActions = null)
+    public static function load(InternalType\AbstractTypeObject $dictionary, ?\SplObjectStorage $processedActions = null)
     {
         if ($processedActions === null) {
             $processedActions = new \SplObjectStorage();
@@ -199,7 +199,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      * @return \LaminasPdf\InternalType\IndirectObject|\LaminasPdf\InternalType\IndirectObjectReference
      * @internal
      */
-    public function dumpAction(ObjectFactory $factory, \SplObjectStorage $processedActions = null)
+    public function dumpAction(ObjectFactory $factory, ?\SplObjectStorage $processedActions = null)
     {
         if ($processedActions === null) {
             $processedActions = new \SplObjectStorage();
@@ -270,7 +270,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      *
      * @return \LaminasPdf\Action\AbstractAction
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->next);
     }
@@ -280,7 +280,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      *
      * @return integer
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->next);
     }
@@ -288,17 +288,17 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
     /**
      * Go to next child
      */
-    public function next()
+    public function next(): void
     {
-        return next($this->next);
+        next($this->next);
     }
 
     /**
      * Rewind children
      */
-    public function rewind()
+    public function rewind(): void
     {
-        return reset($this->next);
+        reset($this->next);
     }
 
     /**
@@ -306,7 +306,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      *
      * @return boolean
      */
-    public function valid()
+    public function valid(): bool
     {
         return current($this->next) !== false;
     }
@@ -316,7 +316,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      *
      * @return \LaminasPdf\Action\AbstractAction|null
      */
-    public function getChildren()
+    public function getChildren(): ?RecursiveIterator
     {
         return current($this->next);
     }
@@ -326,7 +326,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      *
      * @return bool  whether container has any pages
      */
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return count($this->next) > 0;
     }
@@ -341,7 +341,7 @@ abstract class AbstractAction extends Pdf\InternalStructure\NavigationTarget imp
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return is_countable($this->childOutlines) ? count($this->childOutlines) : 0;
     }
