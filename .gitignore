@@ -1,3 +1,6 @@
 vendor/
 composer.lock
-.idea
+src/.svn/
+.phpunit.result.cache
+test/_files/*.pdf
+examples/output/*.pdf

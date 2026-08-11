@@ -394,6 +394,120 @@ class Page
     }
 
     /**
+     * Build the path (moveto + line/curve segments) for a rounded rectangle,
+     * without painting it. Shared by drawRoundedRectangle() (fills/strokes it)
+     * and drawRoundedRectangleWithShading() (clips to it instead).
+     *
+     * @param float $x1,$y1,$x2,$y2
+     * @param integer|array $radius
+     * @return string
+     */
+    private function _buildRoundedRectanglePath($x1, $y1, $x2, $y2, $radius)
+    {
+        if (!is_array($radius)) {
+            $radius = [$radius, $radius, $radius, $radius];
+        } else {
+            for ($i = 0; $i < 4; $i++) {
+                if (!isset($radius[$i])) {
+                    $radius[$i] = 0;
+                }
+            }
+        }
+
+        $topLeftX = $x1;
+        $topLeftY = $y2;
+        $topRightX = $x2;
+        $topRightY = $y2;
+        $bottomRightX = $x2;
+        $bottomRightY = $y1;
+        $bottomLeftX = $x1;
+        $bottomLeftY = $y1;
+
+        $path = '';
+
+        //draw top side
+        $x1Obj = new InternalType\NumericObject($topLeftX + $radius[0]);
+        $y1Obj = new InternalType\NumericObject($topLeftY);
+        $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " m\n";
+        $x1Obj = new InternalType\NumericObject($topRightX - $radius[1]);
+        $y1Obj = new InternalType\NumericObject($topRightY);
+        $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
+
+        //draw top right corner if needed
+        if ($radius[1] != 0) {
+            $x1Obj = new InternalType\NumericObject($topRightX);
+            $y1Obj = new InternalType\NumericObject($topRightY);
+            $x2Obj = new InternalType\NumericObject($topRightX);
+            $y2Obj = new InternalType\NumericObject($topRightY);
+            $x3Obj = new InternalType\NumericObject($topRightX);
+            $y3Obj = new InternalType\NumericObject($topRightY - $radius[1]);
+            $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
+                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
+                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
+                . " c\n";
+        }
+
+        //draw right side
+        $x1Obj = new InternalType\NumericObject($bottomRightX);
+        $y1Obj = new InternalType\NumericObject($bottomRightY + $radius[2]);
+        $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
+
+        //draw bottom right corner if needed
+        if ($radius[2] != 0) {
+            $x1Obj = new InternalType\NumericObject($bottomRightX);
+            $y1Obj = new InternalType\NumericObject($bottomRightY);
+            $x2Obj = new InternalType\NumericObject($bottomRightX);
+            $y2Obj = new InternalType\NumericObject($bottomRightY);
+            $x3Obj = new InternalType\NumericObject($bottomRightX - $radius[2]);
+            $y3Obj = new InternalType\NumericObject($bottomRightY);
+            $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
+                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
+                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
+                . " c\n";
+        }
+
+        //draw bottom side
+        $x1Obj = new InternalType\NumericObject($bottomLeftX + $radius[3]);
+        $y1Obj = new InternalType\NumericObject($bottomLeftY);
+        $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
+
+        //draw bottom left corner if needed
+        if ($radius[3] != 0) {
+            $x1Obj = new InternalType\NumericObject($bottomLeftX);
+            $y1Obj = new InternalType\NumericObject($bottomLeftY);
+            $x2Obj = new InternalType\NumericObject($bottomLeftX);
+            $y2Obj = new InternalType\NumericObject($bottomLeftY);
+            $x3Obj = new InternalType\NumericObject($bottomLeftX);
+            $y3Obj = new InternalType\NumericObject($bottomLeftY + $radius[3]);
+            $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
+                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
+                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
+                . " c\n";
+        }
+
+        //draw left side
+        $x1Obj = new InternalType\NumericObject($topLeftX);
+        $y1Obj = new InternalType\NumericObject($topLeftY - $radius[0]);
+        $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
+
+        //draw top left corner if needed
+        if ($radius[0] != 0) {
+            $x1Obj = new InternalType\NumericObject($topLeftX);
+            $y1Obj = new InternalType\NumericObject($topLeftY);
+            $x2Obj = new InternalType\NumericObject($topLeftX);
+            $y2Obj = new InternalType\NumericObject($topLeftY);
+            $x3Obj = new InternalType\NumericObject($topLeftX + $radius[0]);
+            $y3Obj = new InternalType\NumericObject($topLeftY);
+            $path .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
+                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
+                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
+                . " c\n";
+        }
+
+        return $path;
+    }
+
+    /**
      * Clone page, extract it and dependent objects from the current document,
      * so it can be used within other docs.
      */
@@ -1148,6 +1262,36 @@ class Page
     }
 
     /**
+     * Draw a circle centered on x, y with a radius of radius, filled by a
+     * shading instead of a flat color.
+     *
+     * Just clipCircle() + paint, same relationship drawRectangleWithShading()
+     * has to clipRectangle()/drawRectangle().
+     *
+     * @param Resource\Shading $shading
+     * @param float $x
+     * @param float $y
+     * @param float $radius
+     * @param float $startAngle  Starting angle in radians (optional - full circle if omitted)
+     * @param float $endAngle    Ending angle in radians
+     * @return \LaminasPdf\Page
+     */
+    public function drawCircleWithShading(Resource\Shading $shading, $x, $y, $radius, $startAngle = null, $endAngle = null)
+    {
+        $this->drawEllipseWithShading(
+            $shading,
+            $x - $radius,
+            $y - $radius,
+            $x + $radius,
+            $y + $radius,
+            $startAngle,
+            $endAngle
+        );
+
+        return $this;
+    }
+   
+    /**
      * Draw an ellipse inside the specified rectangle.
      *
      * Method signatures:
@@ -1277,6 +1421,37 @@ class Page
         if ($startAngle !== null) {
             $this->_contents .= "Q\n";
         }
+
+        return $this;
+    }
+
+    /**
+     * Draw an ellipse inside the specified rectangle, filled by a shading
+     * instead of a flat color.
+     *
+     * Reuses clipEllipse() for the path/clip construction (including its
+     * optional pie-slice angular clip) rather than duplicating the Bezier
+     * curve math here - this method is just: open a scope, clip to the
+     * ellipse (or arc), paint the shading through it, close the scope.
+     *
+     * @param Resource\Shading $shading
+     * @param float $x1,$y1,$x2,$y2
+     * @param float $startAngle  Starting angle in radians (optional - full ellipse if omitted)
+     * @param float $endAngle    Ending angle in radians
+     * @return \LaminasPdf\Page
+     */
+    public function drawEllipseWithShading(Resource\Shading $shading, $x1, $y1, $x2, $y2, $startAngle = null, $endAngle = null)
+    {
+        $this->_addProcSet('PDF');
+
+        $this->_contents .= "q\n";
+        $this->clipEllipse($x1, $y1, $x2, $y2, $startAngle, $endAngle);
+
+        $shadingName = $this->_attachResource('Shading', $shading);
+        $shadingNameObj = new InternalType\NameObject($shadingName);
+        $this->_contents .= $shadingNameObj->toString() . " sh\n";
+
+        $this->_contents .= "Q\n";
 
         return $this;
     }
@@ -1456,6 +1631,44 @@ class Page
     }
 
     /**
+     * Paint a shading, clipped to a rectangle.
+     *
+     * Build the shading separately via Resource\Shading::topToBottom()/
+     * leftToRight()/cornerToCorner()/radialCentered() (or the lower-level
+     * axial()/radial() directly) - this method just clips to the rect and
+     * paints it through, same relationship drawImage() has to Resource\Image.
+     *
+     * For a translucent shading, wrap the call the same way you would any
+     * other draw* method:
+     *   $page->saveGS()->setAlpha(0.5)->drawRectWithShading(...)->restoreGS();
+     *
+     * @param Resource\Shading $shading
+     * @param float $x1,$y1,$x2,$y2  Rectangle bounds
+     * @return \LaminasPdf\Page
+     */
+    public function drawRectangleWithShading(Resource\Shading $shading, $x1, $y1, $x2, $y2)
+    {
+        $this->_addProcSet('PDF');
+
+        $shadingName = $this->_attachResource('Shading', $shading);
+        $shadingNameObj = new InternalType\NameObject($shadingName);
+
+        $x1Obj = new InternalType\NumericObject($x1);
+        $y1Obj = new InternalType\NumericObject($y1);
+        $widthObj = new InternalType\NumericObject($x2 - $x1);
+        $heightObj = new InternalType\NumericObject($y2 - $y1);
+
+        $this->_contents .= "q\n"
+            . $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
+            . $widthObj->toString() . ' ' . $heightObj->toString() . " re\n"
+            . " W\nn\n"
+            . $shadingNameObj->toString() . " sh\n"
+            . "Q\n";
+
+        return $this;
+    }
+
+    /**
      * Draw a rounded rectangle.
      *
      * Fill types:
@@ -1467,10 +1680,7 @@ class Page
      * of four integers representing the radius starting at top left, going
      * clockwise
      *
-     * @param float $x1
-     * @param float $y1
-     * @param float $x2
-     * @param float $y2
+     * @param float $x1,$y1,$x2,$y2
      * @param integer|array $radius
      * @param integer $fillType
      * @return \LaminasPdf\Page
@@ -1483,106 +1693,9 @@ class Page
         $radius,
         $fillType = self::SHAPE_DRAW_FILL_AND_STROKE
     ) {
-
         $this->_addProcSet('PDF');
 
-        if (!is_array($radius)) {
-            $radius = [$radius, $radius, $radius, $radius];
-        } else {
-            for ($i = 0; $i < 4; $i++) {
-                if (!isset($radius[$i])) {
-                    $radius[$i] = 0;
-                }
-            }
-        }
-
-        $topLeftX = $x1;
-        $topLeftY = $y2;
-        $topRightX = $x2;
-        $topRightY = $y2;
-        $bottomRightX = $x2;
-        $bottomRightY = $y1;
-        $bottomLeftX = $x1;
-        $bottomLeftY = $y1;
-
-        //draw top side
-        $x1Obj = new InternalType\NumericObject($topLeftX + $radius[0]);
-        $y1Obj = new InternalType\NumericObject($topLeftY);
-        $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " m\n";
-        $x1Obj = new InternalType\NumericObject($topRightX - $radius[1]);
-        $y1Obj = new InternalType\NumericObject($topRightY);
-        $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
-
-        //draw top right corner if needed
-        if ($radius[1] != 0) {
-            $x1Obj = new InternalType\NumericObject($topRightX);
-            $y1Obj = new InternalType\NumericObject($topRightY);
-            $x2Obj = new InternalType\NumericObject($topRightX);
-            $y2Obj = new InternalType\NumericObject($topRightY);
-            $x3Obj = new InternalType\NumericObject($topRightX);
-            $y3Obj = new InternalType\NumericObject($topRightY - $radius[1]);
-            $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
-                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
-                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
-                . " c\n";
-        }
-
-        //draw right side
-        $x1Obj = new InternalType\NumericObject($bottomRightX);
-        $y1Obj = new InternalType\NumericObject($bottomRightY + $radius[2]);
-        $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
-
-        //draw bottom right corner if needed
-        if ($radius[2] != 0) {
-            $x1Obj = new InternalType\NumericObject($bottomRightX);
-            $y1Obj = new InternalType\NumericObject($bottomRightY);
-            $x2Obj = new InternalType\NumericObject($bottomRightX);
-            $y2Obj = new InternalType\NumericObject($bottomRightY);
-            $x3Obj = new InternalType\NumericObject($bottomRightX - $radius[2]);
-            $y3Obj = new InternalType\NumericObject($bottomRightY);
-            $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
-                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
-                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
-                . " c\n";
-        }
-
-        //draw bottom side
-        $x1Obj = new InternalType\NumericObject($bottomLeftX + $radius[3]);
-        $y1Obj = new InternalType\NumericObject($bottomLeftY);
-        $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
-
-        //draw bottom left corner if needed
-        if ($radius[3] != 0) {
-            $x1Obj = new InternalType\NumericObject($bottomLeftX);
-            $y1Obj = new InternalType\NumericObject($bottomLeftY);
-            $x2Obj = new InternalType\NumericObject($bottomLeftX);
-            $y2Obj = new InternalType\NumericObject($bottomLeftY);
-            $x3Obj = new InternalType\NumericObject($bottomLeftX);
-            $y3Obj = new InternalType\NumericObject($bottomLeftY + $radius[3]);
-            $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
-                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
-                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
-                . " c\n";
-        }
-
-        //draw left side
-        $x1Obj = new InternalType\NumericObject($topLeftX);
-        $y1Obj = new InternalType\NumericObject($topLeftY - $radius[0]);
-        $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
-
-        //draw top left corner if needed
-        if ($radius[0] != 0) {
-            $x1Obj = new InternalType\NumericObject($topLeftX);
-            $y1Obj = new InternalType\NumericObject($topLeftY);
-            $x2Obj = new InternalType\NumericObject($topLeftX);
-            $y2Obj = new InternalType\NumericObject($topLeftY);
-            $x3Obj = new InternalType\NumericObject($topLeftX + $radius[0]);
-            $y3Obj = new InternalType\NumericObject($topLeftY);
-            $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . ' '
-                . $x2Obj->toString() . ' ' . $y2Obj->toString() . ' '
-                . $x3Obj->toString() . ' ' . $y3Obj->toString() . ' '
-                . " c\n";
-        }
+        $this->_contents .= $this->_buildRoundedRectanglePath($x1, $y1, $x2, $y2, $radius);
 
         switch ($fillType) {
             case self::SHAPE_DRAW_FILL_AND_STROKE:
@@ -1599,6 +1712,39 @@ class Page
         return $this;
     }
 
+    /**
+     * Paint a shading, clipped to a rounded rectangle.
+     *
+     * Same relationship as drawRectWithShading() has to drawRectangle() -
+     * build the shading separately via Resource\Shading, this method clips
+     * to the rounded-rect path and paints it through instead of filling.
+     * Deliberately a sibling method rather than a $fillType option, since
+     * $fillType is a plain 3-value enum with no data attached, and a
+     * shading option would need to carry a Resource\Shading alongside it -
+     * same reasoning as drawRectWithShading()/drawTextWithShading() being
+     * their own methods rather than parameters bolted onto existing ones.
+     *
+     * @param Resource\Shading $shading
+     * @param float $x1,$y1,$x2,$y2
+     * @param integer|array $radius
+     * @return \LaminasPdf\Page
+     */
+    public function drawRoundedRectangleWithShading(Resource\Shading $shading, $x1, $y1, $x2, $y2, $radius)
+    {
+        $this->_addProcSet('PDF');
+
+        $shadingName = $this->_attachResource('Shading', $shading);
+        $shadingNameObj = new InternalType\NameObject($shadingName);
+
+        $this->_contents .= "q\n"
+            . $this->_buildRoundedRectanglePath($x1, $y1, $x2, $y2, $radius)
+            . "h\nW\nn\n"
+            . $shadingNameObj->toString() . " sh\n"
+            . "Q\n";
+
+        return $this;
+    }
+  
     /**
      * Draw a line of text at the specified position.
      *
@@ -1626,6 +1772,59 @@ class Page
             . $xObj->toString() . ' ' . $yObj->toString() . " Td\n"
             . $textObj->toString() . " Tj\n"
             . "ET\n";
+
+        return $this;
+    }
+
+    /**
+     * Draw a line of text filled by a shading, clipped to the glyph outlines
+     * themselves (like CSS background-clip: text) - nothing is painted
+     * outside the letterforms.
+     *
+     * Build the shading separately via Resource\Shading - this method just
+     * clips to the text and paints it through, same relationship drawImage()
+     * has to Resource\Image.
+     *
+     * Uses text rendering mode 7 ("add to clip path, paint nothing"); the
+     * shading is painted when the text object closes and the glyph outlines
+     * become the clip path. Whatever fill color is currently set is
+     * irrelevant here - the shading IS the fill.
+     *
+     * For a translucent shading, wrap the call the same way you would any
+     * other draw* method:
+     *   $page->saveGS()->setAlpha(0.5)->drawTextWithShading(...)->restoreGS();
+     *
+     * @param Resource\Shading $shading
+     * @param string $text
+     * @param float $x  Text origin (baseline start), same as drawText()
+     * @param float $y  Text origin (baseline), same as drawText()
+     * @param string $charEncoding
+     * @return \LaminasPdf\Page
+     */
+    public function drawTextWithShading(Resource\Shading $shading, $text, $x, $y, $charEncoding = '')
+    {
+        if ($this->_font === null) {
+            throw new Exception\LogicException('Font has not been set');
+        }
+
+        $this->_addProcSet('Text');
+        $this->_addProcSet('PDF');
+
+        $shadingName = $this->_attachResource('Shading', $shading);
+        $shadingNameObj = new InternalType\NameObject($shadingName);
+
+        $textObj = new InternalType\StringObject($this->_font->encodeString($text, $charEncoding));
+        $xObj = new InternalType\NumericObject($x);
+        $yObj = new InternalType\NumericObject($y);
+
+        $this->_contents .= "q\n"
+            . "BT\n"
+            . "7 Tr\n"
+            . $xObj->toString() . ' ' . $yObj->toString() . " Td\n"
+            . $textObj->toString() . " Tj\n"
+            . "ET\n"
+            . $shadingNameObj->toString() . " sh\n"
+            . "Q\n";
 
         return $this;
     }
@@ -1787,7 +1986,7 @@ class Page
 
         return $this;
     }
-
+    
     /**
      * Translate coordination system.
      *
@@ -1833,4 +2032,5 @@ class Page
 
         return $this;
     }
+
 }

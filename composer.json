@@ -12,7 +12,6 @@
     "laminas/laminas-stdlib": ">=2.0.0"
   },
   "require-dev": {
-    "laminas/laminas-coding-standard": "~1.0.0",
     "phpunit/phpunit": "^9.6"
   },
   "autoload": {

@@ -812,4 +812,109 @@ class Html implements ColorInterface
             return new Rgb($r, $g, $b);
         }
     }
+    
+    /**
+     * Given a single color, produce a subtle 3-color transition: a lighter
+     * shade, the color itself, and a darker shade - same lightness step in
+     * each direction, hue/saturation preserved (via HSL, not naive RGB
+     * channel-shifting, which would drift hue on saturated colors).
+     *
+     * @param array|string $color   [r,g,b] triple, "#rrggbb" hex, or a name
+     *                              resolvable via self::color()
+     * @param float $lightenAmount  0-1, how much lighter the first stop is (default 0.15)
+     * @param float $darkenAmount   0-1, how much darker the third stop is (default 0.15)
+     * @return array [lighterRgb, baseRgb, darkerRgb] - three [r,g,b] triples
+     */
+    public static function shades($color, $lightenAmount = 0.15, $darkenAmount = 0.15)
+    {
+        $rgb = self::_resolveToRgb($color);
+
+        [$h, $s, $l] = self::_rgbToHsl($rgb);
+
+        $lighter = self::_hslToRgb($h, $s, min(1.0, $l + $lightenAmount));
+        $darker = self::_hslToRgb($h, $s, max(0.0, $l - $darkenAmount));
+
+        return [$lighter, $rgb, $darker];
+    }
+
+    private static function _resolveToRgb($color)
+    {
+        if (is_array($color)) {
+            return $color;
+        }
+
+        $resolved = self::color($color);
+        $components = $resolved->getComponents();
+
+        // Same GrayScale-expansion issue as Shading::_parseColorStop() - a
+        // resolved r==g==b color comes back as a single component, not a triple.
+        if (count($components) === 1) {
+            $gray = $components[0];
+            return [$gray, $gray, $gray];
+        }
+
+        return $components;
+    }
+
+    private static function _rgbToHsl(array $rgb)
+    {
+        [$r, $g, $b] = $rgb;
+        $max = max($r, $g, $b);
+        $min = min($r, $g, $b);
+        $l = ($max + $min) / 2;
+
+        if ($max === $min) {
+            return [0.0, 0.0, $l];
+        }
+
+        $d = $max - $min;
+        $s = $l > 0.5 ? $d / (2 - $max - $min) : $d / ($max + $min);
+
+        if ($max === $r) {
+            $h = ($g - $b) / $d + ($g < $b ? 6 : 0);
+        } elseif ($max === $g) {
+            $h = ($b - $r) / $d + 2;
+        } else {
+            $h = ($r - $g) / $d + 4;
+        }
+        $h /= 6;
+
+        return [$h, $s, $l];
+    }
+
+    private static function _hslToRgb($h, $s, $l)
+    {
+        if ($s == 0) {
+            return [$l, $l, $l];
+        }
+
+        $q = $l < 0.5 ? $l * (1 + $s) : $l + $s - $l * $s;
+        $p = 2 * $l - $q;
+
+        return [
+            self::_hueToRgb($p, $q, $h + 1 / 3),
+            self::_hueToRgb($p, $q, $h),
+            self::_hueToRgb($p, $q, $h - 1 / 3),
+        ];
+    }
+
+    private static function _hueToRgb($p, $q, $t)
+    {
+        if ($t < 0) {
+            $t += 1;
+        }
+        if ($t > 1) {
+            $t -= 1;
+        }
+        if ($t < 1 / 6) {
+            return $p + ($q - $p) * 6 * $t;
+        }
+        if ($t < 1 / 2) {
+            return $q;
+        }
+        if ($t < 2 / 3) {
+            return $p + ($q - $p) * (2 / 3 - $t) * 6;
+        }
+        return $p;
+    }    
 }
